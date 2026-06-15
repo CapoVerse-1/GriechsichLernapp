@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #e9f5f2 0%, transparent 60%),
+      linear-gradient(180deg, #fbf7ee 0%, #f5efe2 100%);
+    background-attachment: fixed;
+    color: theme('colors.ink.DEFAULT');
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
+  }
+  * { -webkit-tap-highlight-color: transparent; }
+  button { font: inherit; }
+}
+
+@layer utilities {
+  .safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+  .safe-top { padding-top: max(0.5rem, env(safe-area-inset-top)); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .greek { font-family: theme('fontFamily.greek'); }
+  .tap { @apply active:scale-[0.97] transition-transform; }
+  .glass {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* App shell width: phone-first, centered on larger screens */
+.app-shell {
+  max-width: 460px;
+  margin: 0 auto;
+  min-height: 100%;
+  position: relative;
+}

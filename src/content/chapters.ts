@@ -1,0 +1,98 @@
+import type { Chapter, ModeMeta, ModeId } from './types'
+
+export const MODES: Record<ModeId, ModeMeta> = {
+  flashcards: { id: 'flashcards', title: 'Karteikarten', subtitle: 'Lernen & wiederholen', icon: '🃏', accent: 'teal', examRef: 'Frage 3 · 5 · 7' },
+  flashquiz: { id: 'flashquiz', title: 'Selbsttest', subtitle: 'Karteikarten zum Prüfen', icon: '✍️', accent: 'olive', examRef: 'Frage 3 · 5 · 7 · 9' },
+  mc: { id: 'mc', title: 'Multiple Choice', subtitle: '1 oder mehrere richtig', icon: '☑️', accent: 'sun', examRef: 'Frage 2 · 4 · 6 · 8' },
+  match: { id: 'match', title: 'Zuordnen', subtitle: 'Buchstaben & Begriffe matchen', icon: '🔗', accent: 'coral', examRef: 'Frage 1 · 1a' },
+  type: { id: 'type', title: 'Tipp-Trainer', subtitle: 'Transkription schreiben', icon: '⌨️', accent: 'teal', examRef: 'Frage 1 · 1a' },
+  builder: { id: 'builder', title: 'Übersetzungs-Builder', subtitle: 'Fragmente zusammensetzen', icon: '🧱', accent: 'olive', examRef: 'Frage 10' },
+  citation: { id: 'citation', title: 'Zitat-Analysator', subtitle: 'Zitate zerlegen', icon: '🏷️', accent: 'sun', examRef: 'Frage 2 · 4 · 6' },
+  blitz: { id: 'blitz', title: 'Blitz-Runde', subtitle: 'Schnell gegen die Uhr', icon: '⚡', accent: 'coral', examRef: 'Alle Themen' },
+  exam: { id: 'exam', title: 'Klausur-Simulation', subtitle: 'Volle Prüfung · 68 Punkte', icon: '🎓', accent: 'teal', examRef: 'Frage 1–10' },
+}
+
+export const CHAPTERS: Chapter[] = [
+  {
+    id: 'alphabet',
+    num: 1,
+    title: 'Das Alphabet',
+    subtitle: 'Buchstaben & Geschichte',
+    icon: 'Α',
+    accent: 'teal',
+    blurb: '24 Buchstaben, ihre Transkription und die Geschichte von Linear A bis zur Standardisierung 403 v. Chr.',
+    modes: ['flashcards', 'match', 'mc', 'type', 'blitz'],
+    units: ['Einheit 1', 'Einheit 2', 'Handout Transkription'],
+  },
+  {
+    id: 'transkription',
+    num: 2,
+    title: 'Transkription',
+    subtitle: 'Griechisch ↔ Lateinisch',
+    icon: 'ē',
+    accent: 'olive',
+    blurb: 'Beide Richtungen tippen, die 6 Sonderregeln (ē/ō, Spiritus, υ-Diphthonge, γ vor Guttural, ρ→rh) beherrschen.',
+    modes: ['type', 'match', 'mc', 'flashquiz', 'blitz'],
+    units: ['Handout Transkription', 'Einheit 2–10'],
+  },
+  {
+    id: 'diakritika',
+    num: 3,
+    title: 'Diakritika',
+    subtitle: 'Zeichen & Interpunktion',
+    icon: '῾',
+    accent: 'sun',
+    blurb: 'Akzente (Akut, Gravis, Zirkumflex), Spiritus asper/lenis und die griechische Interpunktion (· und ;).',
+    modes: ['flashcards', 'mc', 'flashquiz'],
+    units: ['Einheit 2', 'Einheit 4', 'Handout Transkription'],
+  },
+  {
+    id: 'vokabular',
+    num: 4,
+    title: 'Vokabular',
+    subtitle: '≈130 Begriffe',
+    icon: 'λ',
+    accent: 'coral',
+    blurb: 'Das Kernstück: alle philosophischen Termini — frühgriechisch, platonisch und aristotelisch — griechisch ↔ deutsch.',
+    modes: ['flashcards', 'flashquiz', 'mc', 'blitz'],
+    vocabGroups: ['vorsokratiker', 'platon', 'aristoteles', 'allgemein'],
+    units: ['Einheit 1–10', 'Muster Q3 · Q5 · Q7'],
+  },
+  {
+    id: 'zitierweise',
+    num: 5,
+    title: 'Zitierweisen',
+    subtitle: 'D-K · Stephanus · Bekker',
+    icon: '§',
+    accent: 'teal',
+    blurb: 'Vorsokratiker (Diels-Kranz), Platon (Stephanus) und Aristoteles (Bekker) — Aufbau erkennen und zerlegen.',
+    modes: ['citation', 'mc', 'flashcards'],
+    units: ['3 Zitierweise-Handouts', 'Einheit 3 · 6 · 10'],
+  },
+  {
+    id: 'grammatik',
+    num: 6,
+    title: 'Grammatik',
+    subtitle: 'Diathese · Aspekt · Modus',
+    icon: 'γ',
+    accent: 'olive',
+    blurb: 'Medium, Aorist & Augment, Optativ/Potentialis, Kasus, ACI, εἶναι/ὄν/οὐσία und die Verbformen.',
+    modes: ['flashcards', 'mc', 'flashquiz'],
+    units: ['Einheit 4 · 5 · 7 · 9', 'Handout Formenlehre'],
+  },
+  {
+    id: 'fragmente',
+    num: 7,
+    title: 'Die Fragmente',
+    subtitle: 'Übersetzen',
+    icon: '☘',
+    accent: 'sun',
+    blurb: 'Heraklit, Xenophanes, Anaximander, Parmenides und Platon — die durchübersetzten Stellen Wort für Wort.',
+    modes: ['builder', 'flashcards', 'citation'],
+    units: ['Einheit 4–10'],
+  },
+]
+
+export function getChapter(id: string): Chapter | undefined {
+  return CHAPTERS.find((c) => c.id === id)
+}

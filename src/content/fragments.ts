@@ -1,0 +1,103 @@
+import type { Fragment } from './types'
+
+// The fragments translated word-by-word in the folien.
+// `blocks` are ordered German chunks for the translation-builder mode.
+
+export const FRAGMENTS: Fragment[] = [
+  {
+    id: 'f-parm-b3',
+    cite: 'D-K 28 B 3',
+    author: 'Parmenides',
+    gr: 'τὸ γὰρ αὐτὸ νοεῖν ἐστίν τε καὶ εἶναι.',
+    de: 'Denn dasselbe ist Denken und Sein.',
+    blocks: ['Denn', 'dasselbe', 'ist', 'Denken', 'und', 'Sein'],
+  },
+  {
+    id: 'f-her-b1',
+    cite: 'DK 22 B 1',
+    author: 'Heraklit',
+    gr: 'τοῦ δὲ λόγου τοῦδ᾽ ἐόντος ἀεὶ ἀξύνετοι γίνονται ἄνθρωποι.',
+    de: 'In Bezug auf diesen seienden Logos aber werden die Menschen immer unverständig.',
+    blocks: ['In Bezug auf', 'diesen seienden Logos', 'aber', 'werden', 'die Menschen', 'immer', 'unverständig'],
+  },
+  {
+    id: 'f-her-b45',
+    cite: 'DK 22 B 45',
+    author: 'Heraklit',
+    gr: 'ψυχῆς πείρατα ἰὼν οὐκ ἂν ἐξεύροιο, πᾶσαν ἐπιπορευόμενος ὁδόν· οὕτω βαθὺν λόγον ἔχει.',
+    de: 'Des Lebensodems Grenzen könntest du gehend nicht ausfindig machen, auch wenn du jeden Weg durchwandertest; so tiefen Logos hat er.',
+    blocks: ['Des Lebensodems Grenzen', 'könntest du', 'gehend', 'nicht ausfindig machen', 'auch wenn du jeden Weg durchwandertest', 'so tiefen Logos', 'hat er'],
+  },
+  {
+    id: 'f-her-b53',
+    cite: 'D-K 22 B 53',
+    author: 'Heraklit',
+    gr: 'πόλεμος πάντων μὲν πατήρ ἐστι, πάντων δὲ βασιλεύς, καὶ τοὺς μὲν θεοὺς ἔδειξε τοὺς δὲ ἀνθρώπους, τοὺς μὲν δούλους ἐποίησε τοὺς δὲ ἐλευθέρους.',
+    de: 'Krieg ist aller (Dinge) Vater und aller (Dinge) König, und die einen zeigt er als Götter, die anderen als Menschen, die einen macht er zu Sklaven, die anderen zu Freien.',
+    blocks: ['Krieg ist', 'aller (Dinge) Vater', 'und aller (Dinge) König', 'die einen zeigt er als Götter', 'die anderen als Menschen', 'die einen macht er zu Sklaven', 'die anderen zu Freien'],
+  },
+  {
+    id: 'f-her-b49a',
+    cite: 'D-K 22 B 49a',
+    author: 'Heraklit',
+    gr: 'ποταμοῖς τοῖς αὐτοῖς ἐμβαίνομέν τε καὶ οὐκ ἐμβαίνομεν, εἶμέν τε καὶ οὐκ εἶμεν.',
+    de: 'In dieselben Flüsse steigen wir und steigen wir nicht, wir sind und wir sind nicht.',
+    blocks: ['In dieselben Flüsse', 'steigen wir', 'und steigen wir nicht', 'wir sind', 'und wir sind nicht'],
+  },
+  {
+    id: 'f-xen-b23',
+    cite: 'DK 21 B 23',
+    author: 'Xenophanes',
+    gr: 'εἷς θεός, ἔν τε θεοῖσι καὶ ἀνθρώποισι μέγιστος, οὔτι δέμας θνητοῖσιν ὁμοίιος οὐδὲ νόημα.',
+    de: 'Ein Gott, unter Göttern und Menschen der größte, gar nicht an Gestalt den Sterblichen ähnlich noch an Gedanken.',
+    blocks: ['Ein Gott', 'unter Göttern und Menschen', 'der größte', 'gar nicht an Gestalt', 'den Sterblichen ähnlich', 'noch an Gedanken'],
+  },
+  {
+    id: 'f-xen-b11',
+    cite: 'DK 21 B 11',
+    author: 'Xenophanes',
+    gr: 'πάντα θεοῖσ᾽ ἀνέθηκαν Ὅμηρός θ᾽ Ἡσίοδός τε, ὅσσα παρ᾽ ἀνθρώποισιν ὀνείδεα καὶ ψόγος ἐστίν, κλέπτειν μοιχεύειν τε καὶ ἀλλήλους ἀπατεύειν.',
+    de: 'Alles hängten den Göttern Homer und Hesiod an, was bei den Menschen Tadel und Schimpf ist: Stehlen, Ehebrechen und einander Betrügen.',
+    blocks: ['Alles hängten den Göttern', 'Homer und Hesiod', 'an', 'was bei den Menschen', 'Tadel und Schimpf ist', 'Stehlen', 'Ehebrechen', 'und einander Betrügen'],
+  },
+  {
+    id: 'f-anax-b1',
+    cite: 'DK 12 B 1',
+    author: 'Anaximander',
+    gr: 'Ἀναξίμανδρος … ἀρχὴν … εἴρηκε τῶν ὄντων τὸ ἄπειρον … ἐξ ὧν δὲ ἡ γένεσίς ἐστι τοῖς οὖσι, καὶ τὴν φθορὰν εἰς ταῦτα γίνεσθαι κατὰ τὸ χρεών· διδόναι γὰρ αὐτὰ δίκην καὶ τίσιν ἀλλήλοις τῆς ἀδικίας κατὰ τὴν τοῦ χρόνου τάξιν.',
+    de: 'Anaximander hat gesagt, der Ursprung des Seienden sei das Unendliche; woraus aber das Werden den Seienden ist, dahin werde auch die Vernichtung gemäß der Notwendigkeit; denn sie geben einander Recht und Buße für das Unrecht, gemäß der Ordnung der Zeit.',
+    blocks: ['Anaximander hat gesagt', 'der Ursprung des Seienden', 'sei das Unendliche', 'woraus aber das Werden den Seienden ist', 'dahin werde auch die Vernichtung', 'gemäß der Notwendigkeit', 'sie geben einander Recht und Buße', 'für das Unrecht', 'gemäß der Ordnung der Zeit'],
+  },
+  {
+    id: 'f-plat-phaidon99e',
+    cite: 'Platon, Phaidon 99e',
+    author: 'Platon',
+    gr: 'ἔδοξε δή μοι χρῆναι εἰς τοὺς λόγους καταφυγόντα ἐν ἐκείνοις σκοπεῖν τῶν ὄντων τὴν ἀλήθειαν.',
+    de: 'Es schien mir aber notwendig zu sein, zu den Logoi hinzufliehen und in ihnen die Wahrheit der Seienden auszuspähen.',
+    blocks: ['Es schien mir', 'aber notwendig zu sein', 'zu den Logoi hinzufliehen', 'und in ihnen', 'die Wahrheit der Seienden', 'auszuspähen'],
+  },
+  {
+    id: 'f-plat-phaidon100b',
+    cite: 'Platon, Phaidon 100b',
+    author: 'Platon',
+    gr: 'εἶναί τι καλὸν αὐτὸ καθ᾽ αὑτὸ καὶ ἀγαθὸν καὶ μέγα καὶ τἆλλα πάντα.',
+    de: 'dass es etwas Schönes selbst gemäß sich selbst gibt, und Gutes und Großes und all das andere.',
+    blocks: ['dass es etwas Schönes', 'selbst gemäß sich selbst', 'gibt', 'und Gutes', 'und Großes', 'und all das andere'],
+  },
+  {
+    id: 'f-plat-phaidon100c',
+    cite: 'Platon, Phaidon 100c',
+    author: 'Platon',
+    gr: 'φαίνεται γάρ μοι, εἴ τί ἐστιν ἄλλο καλὸν πλὴν αὐτὸ τὸ καλόν, οὐδὲ δι᾽ ἓν ἄλλο καλὸν εἶναι ἢ διότι μετέχει ἐκείνου τοῦ καλοῦ.',
+    de: 'Es scheint mir nämlich, wenn etwas anderes schön ist außer dem Schönen selbst, dass es durch nichts anderes schön ist, als weil es an jenem Schönen Anteil hat.',
+    blocks: ['Es scheint mir nämlich', 'wenn etwas anderes schön ist', 'außer dem Schönen selbst', 'dass es durch nichts anderes schön ist', 'als weil es', 'an jenem Schönen Anteil hat'],
+  },
+  {
+    id: 'f-plat-timaios',
+    cite: 'Platon, Timaios 27d–28a',
+    author: 'Platon',
+    gr: 'τί τὸ ὂν ἀεί, γένεσιν δὲ οὐκ ἔχον, καὶ τί τὸ γιγνόμενον μὲν ἀεί, ὂν δὲ οὐδέποτε;',
+    de: 'Was ist das immer Seiende, das kein Werden hat, und was ist das immer Werdende, niemals jedoch Seiende?',
+    blocks: ['Was ist das immer Seiende', 'das kein Werden hat', 'und was ist', 'das immer Werdende', 'niemals jedoch Seiende?'],
+  },
+]

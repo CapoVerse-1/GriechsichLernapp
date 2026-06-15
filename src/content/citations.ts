@@ -1,0 +1,181 @@
+import type { CitationExample } from './types'
+
+// Citation systems — sourced from the three Zitierweise handouts + folien.
+
+export const CITATION_INTRO = {
+  vorsokratiker: {
+    title: 'Vorsokratiker — Diels-Kranz (D-K)',
+    text: 'Die Vorsokratiker werden nach der Ausgabe von Hermann Diels (1903), fortgeführt von Walther Kranz, zitiert — maßgeblich die 5. Auflage von 1935. Aufbau: D-K [Philosophen-Nummer] [Textform A/B] [Fragment-Nummer]. A = Testimonium (Bericht anderer Autoren), B = Fragment (Originalzitat). (C = unecht zugeschrieben.)',
+    forms: 'D-K 28 B 3  ·  oder: Fragment 28 B 3 D-K',
+  },
+  platon: {
+    title: 'Platon — Stephanus-Ausgabe',
+    text: 'Platon wird nach der dreibändigen Stephanus-Ausgabe (Henricus Stephanus / Henri Estienne, Paris 1578) zitiert. Da die Bände eigens paginiert sind, muss der Werktitel stets angegeben werden. Aufbau: [Werk] [Seite] [Abschnitt a/b/c] [Zeile]. Die Zeilenangabe folgt der Burnet-Oxford-Ausgabe.',
+    forms: 'Plat., Plt. 257a 3-5',
+  },
+  aristoteles: {
+    title: 'Aristoteles — Bekker-Ausgabe',
+    text: 'Aristoteles wird nach der Bekker-Ausgabe zitiert (5 Bände; Seitenzahlen nicht mehrfach vergeben → Werkangabe nicht zwingend nötig). Aufbau: [Seite] [Spalte a/b] [Zeile], wobei a = linke, b = rechte Spalte. Mit Buch/Kapitel auch der Werktitel.',
+    forms: '184a10  ·  Phys. I 1 184a10  ·  Arist. Phys. A 1 184a10',
+  },
+}
+
+export const VORSOKRATIKER_NUMBERS: { n: number; name: string }[] = [
+  { n: 11, name: 'Thales' },
+  { n: 12, name: 'Anaximander' },
+  { n: 13, name: 'Anaximenes' },
+  { n: 14, name: 'Pythagoras' },
+  { n: 21, name: 'Xenophanes' },
+  { n: 22, name: 'Heraklit' },
+  { n: 28, name: 'Parmenides' },
+  { n: 31, name: 'Empedokles' },
+  { n: 59, name: 'Anaxagoras' },
+]
+
+export const CITATIONS: CitationExample[] = [
+  {
+    id: 'c-dk28b3',
+    system: 'vorsokratiker',
+    cite: 'D-K 28 B 3',
+    parts: [
+      { token: 'D-K', label: 'Diels/Kranz', role: 'Ausgabe' },
+      { token: '28', label: 'Parmenides', role: 'Philosophen-Nr' },
+      { token: 'B', label: 'Fragment (Originalzitat)', role: 'Textform' },
+      { token: '3', label: '3. Fragment nach D-K', role: 'Fragment-Nr' },
+    ],
+    explain: 'D-K 28 B 3 = Diels/Kranz, Parmenides (28), Fragment (B), Nr. 3.',
+  },
+  {
+    id: 'c-dk22b4',
+    system: 'vorsokratiker',
+    cite: 'DK 22 B 4',
+    parts: [
+      { token: 'DK', label: 'Diels/Kranz', role: 'Ausgabe' },
+      { token: '22', label: 'Heraklit', role: 'Philosophen-Nr' },
+      { token: 'B', label: 'Fragment', role: 'Textform' },
+      { token: '4', label: '4. Fragment nach DK', role: 'Fragment-Nr' },
+    ],
+    explain: 'DK 22 B 4 = Heraklit, Fragment Nr. 4.',
+  },
+  {
+    id: 'c-dk11a6',
+    system: 'vorsokratiker',
+    cite: 'DK 11 A 6',
+    parts: [
+      { token: 'DK', label: 'Diels/Kranz', role: 'Ausgabe' },
+      { token: '11', label: 'Thales', role: 'Philosophen-Nr' },
+      { token: 'A', label: 'Testimonium (Bericht)', role: 'Textform' },
+      { token: '6', label: '6. Testimonium nach DK', role: 'Fragment-Nr' },
+    ],
+    explain: 'DK 11 A 6 = Thales, Testimonium (A), Nr. 6. A = Bericht eines anderen Autors.',
+  },
+  {
+    id: 'c-dk59b11',
+    system: 'vorsokratiker',
+    cite: 'Fragment 59 B 11 D-K',
+    parts: [
+      { token: '59', label: 'Anaxagoras', role: 'Philosophen-Nr' },
+      { token: 'B', label: 'Fragment', role: 'Textform' },
+      { token: '11', label: '11. Fragment nach D-K', role: 'Fragment-Nr' },
+      { token: 'D-K', label: 'Diels/Kranz', role: 'Ausgabe' },
+    ],
+    explain: 'Alternative Anordnung: Fragment 59 (Anaxagoras) B 11 D-K.',
+  },
+  {
+    id: 'c-phaidros',
+    system: 'platon',
+    cite: 'Phaidros 228 a 5',
+    parts: [
+      { token: 'Phaidros', label: 'Werk', role: 'Werktitel' },
+      { token: '228', label: 'Seite (Stephanus)', role: 'Seite' },
+      { token: 'a', label: 'Abschnitt (Stephanus)', role: 'Abschnitt' },
+      { token: '5', label: 'Zeile (Burnet)', role: 'Zeile' },
+    ],
+    explain: 'Phaidros 228 a 5 = Werk Phaidros, Stephanus-Seite 228, Abschnitt a, Burnet-Zeile 5.',
+  },
+  {
+    id: 'c-rep',
+    system: 'platon',
+    cite: 'Platon, rep. 514 a',
+    parts: [
+      { token: 'rep.', label: 'Werk: Staat (Politeia)', role: 'Werktitel' },
+      { token: '514', label: 'Seite (Stephanus)', role: 'Seite' },
+      { token: 'a', label: 'Abschnitt (Stephanus)', role: 'Abschnitt' },
+    ],
+    explain: 'rep. 514 a = Politeia (Der Staat), Stephanus-Seite 514, Abschnitt a.',
+  },
+  {
+    id: 'c-euthphr',
+    system: 'platon',
+    cite: 'Plat., Euthphr. 2b2-3',
+    parts: [
+      { token: 'Euthphr.', label: 'Werk: Euthyphron', role: 'Werktitel' },
+      { token: '2', label: 'Seite (Stephanus)', role: 'Seite' },
+      { token: 'b', label: 'Abschnitt (Stephanus)', role: 'Abschnitt' },
+      { token: '2-3', label: 'Zeilen (Burnet)', role: 'Zeile' },
+    ],
+    explain: 'Euthphr. 2b2-3 = Euthyphron, Seite 2, Abschnitt b, Zeilen 2–3.',
+  },
+  {
+    id: 'c-apol',
+    system: 'platon',
+    cite: 'Plat., Apol. 23 a',
+    parts: [
+      { token: 'Apol.', label: 'Werk: Apologie', role: 'Werktitel' },
+      { token: '23', label: 'Seite (Stephanus)', role: 'Seite' },
+      { token: 'a', label: 'Abschnitt (Stephanus)', role: 'Abschnitt' },
+    ],
+    explain: 'Plat., Apol. 23 a = Apologie des Sokrates, Stephanus-Seite 23, Abschnitt a.',
+  },
+  {
+    id: 'c-en',
+    system: 'aristoteles',
+    cite: 'EN I 1, 1094a',
+    parts: [
+      { token: 'EN', label: 'Werk: Nikomachische Ethik', role: 'Werktitel' },
+      { token: 'I', label: '1. Buch', role: 'Buch' },
+      { token: '1', label: '1. Kapitel', role: 'Kapitel' },
+      { token: '1094', label: 'Bekker-Seite', role: 'Seite' },
+      { token: 'a', label: 'Bekker-Spalte (links)', role: 'Spalte' },
+    ],
+    explain: 'EN I 1, 1094a = Nik. Ethik, 1. Buch, 1. Kapitel, Bekker-Seite 1094, Spalte a.',
+  },
+  {
+    id: 'c-25a2',
+    system: 'aristoteles',
+    cite: '25a2',
+    parts: [
+      { token: '25', label: 'Bekker-Seite', role: 'Seite' },
+      { token: 'a', label: 'Bekker-Spalte (links)', role: 'Spalte' },
+      { token: '2', label: 'Bekker-Zeile', role: 'Zeile' },
+    ],
+    explain: '25a2 = Bekker-Seite 25, Spalte a, Zeile 2. Werkangabe nicht nötig, da Seitenzahlen eindeutig.',
+  },
+  {
+    id: 'c-dean',
+    system: 'aristoteles',
+    cite: 'de An. A 2, 404b5',
+    parts: [
+      { token: 'de An.', label: 'Werk: De anima', role: 'Werktitel' },
+      { token: 'A', label: '1. Buch', role: 'Buch' },
+      { token: '2', label: '2. Kapitel', role: 'Kapitel' },
+      { token: '404', label: 'Bekker-Seite', role: 'Seite' },
+      { token: 'b', label: 'Bekker-Spalte (rechts)', role: 'Spalte' },
+      { token: '5', label: 'Bekker-Zeile', role: 'Zeile' },
+    ],
+    explain: 'de An. A 2, 404b5 = De anima, 1. Buch, 2. Kapitel, Seite 404, Spalte b, Zeile 5.',
+  },
+  {
+    id: 'c-cat',
+    system: 'aristoteles',
+    cite: 'Cat. 2, 1a5',
+    parts: [
+      { token: 'Cat.', label: 'Werk: Kategorien', role: 'Werktitel' },
+      { token: '2', label: '2. Kapitel', role: 'Kapitel' },
+      { token: '1', label: 'Bekker-Seite', role: 'Seite' },
+      { token: 'a', label: 'Bekker-Spalte (links)', role: 'Spalte' },
+      { token: '5', label: 'Bekker-Zeile', role: 'Zeile' },
+    ],
+    explain: 'Cat. 2, 1a5 = Kategorien, 2. Kapitel, Bekker-Seite 1, Spalte a, Zeile 5.',
+  },
+]
