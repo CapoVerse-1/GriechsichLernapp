@@ -34,6 +34,22 @@ function Loader() {
   )
 }
 
+function SetupError({ message }: { message: string }) {
+  return (
+    <div className="grid min-h-screen place-items-center px-5">
+      <div className="max-w-md rounded-3xl bg-white p-6 text-center shadow-card">
+        <div className="font-serif text-5xl font-black text-coral-500">Σ</div>
+        <h1 className="mt-3 text-xl font-black text-ink">Supabase fehlt</h1>
+        <p className="mt-2 text-sm text-ink-faint">{message}</p>
+        <p className="mt-4 rounded-2xl bg-parchment px-4 py-3 text-left font-mono text-xs text-ink/70">
+          VITE_SUPABASE_URL<br />
+          VITE_SUPABASE_ANON_KEY
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   const app = useApp()
   const [view, setView] = useState<View>({ v: 'home' })
@@ -43,6 +59,7 @@ export default function App() {
   useEffect(() => { setView({ v: 'home' }) }, [userId])
 
   if (!app.ready) return <Loader />
+  if (app.error) return <SetupError message={app.error} />
   if (!app.user) return <Login />
 
   const fade = {

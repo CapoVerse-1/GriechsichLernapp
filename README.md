@@ -1,40 +1,40 @@
-# Graecia — Lern-App für Griechische Terminologie
+# Graecia - Lern-App fuer Griechische Terminologie
 
-Eine mobile-first Lern-App für die Philosophie-Prüfung **„Griechische Terminologie"** (Univ. Wien, VO 180013). Der komplette Stoff stammt 1:1 aus den 16 Handouts im Ordner `../Handouts` (siehe `../STOFFUEBERSICHT.md`).
+Mobile-first Lern-App fuer die Philosophie-Pruefung "Griechische Terminologie" mit geteilten Profilen, Fortschritt, XP, Achievements, Klausur-Verlauf und Bestenliste.
 
 ## Stack
-- **React 18 + TypeScript + Vite**
-- **Tailwind CSS** (cleanes, verspieltes Design) + **Framer Motion** (Animationen)
-- **SQLite via sql.js (WASM)** für Fortschritt & Persistenz — die Datenbank wird als Base64 in `localStorage` gespeichert
+
+- React 18 + TypeScript + Vite
+- Tailwind CSS + Framer Motion
+- Supabase Postgres fuer persistente, geraeteuebergreifende Daten
+
+## Supabase Setup
+
+1. Erstelle ein Supabase-Projekt.
+2. Oeffne den Supabase SQL Editor.
+3. Fuehre den kompletten Inhalt aus `supabase/schema.sql` aus.
+4. Kopiere `.env.example` zu `.env.local` und setze:
+
+```bash
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-public-anon-or-publishable-key
+```
+
+In Vercel dieselben Variablen unter Project Settings -> Environment Variables setzen.
+
+> Hinweis: Die App nutzt einfache geteilte Profile ohne Passwort. Die Supabase-RLS-Policies erlauben Lesen und Schreiben mit dem public anon key, damit die Profile auf allen Geraeten funktionieren. Fuer eine oeffentliche App sollte spaeter Supabase Auth ergaenzt und die RLS-Policies pro Nutzer eingeschraenkt werden.
 
 ## Starten
+
 ```bash
 npm install
-npm run dev      # Dev-Server (http://localhost:5173)
-npm run build    # Production-Build nach dist/
-npm run preview  # Build lokal ansehen
+npm run dev
+npm run build
 ```
-> Beim ersten `npm install` wird `sql.js` automatisch aufgelöst; die WASM-Datei wird über `?url` von Vite eingebunden. (Eine Kopie liegt zusätzlich in `public/sql-wasm.wasm`.)
 
-## 7 Kapitel
-1. Das Alphabet & Geschichte · 2. Transkription · 3. Diakritika · 4. Vokabular (~130 Begriffe) · 5. Zitierweisen · 6. Grammatik · 7. Die Fragmente.
-Jedes Kapitel lässt sich **starten, zwischenspeichern und abschließen**.
+## Vercel
 
-## 9 Lernmodi
-**Vom Nutzer gewünscht:** Karteikarten (Lernen), Selbsttest (Karteikarten zum Prüfen), Multiple Choice (1+ richtig), Buchstaben-Matching (Duolingo-Stil).
-**5 zusätzliche:** Transkriptions-Tipptrainer, Fragment-Übersetzungs-Builder, Zitat-Analysator, Blitz-Runde (Timer), Klausur-Simulation (68 Punkte mit Notenschlüssel).
-
-## Gamification
-XP & Level (mit Titeln), Tagesstreak, Achievements, Kapitel-Fortschritt, Klausur-Verlauf — alles in SQLite persistiert.
-
-## Projektstruktur
-```
-src/
-  content/   # Stoff als typisierte Daten (alphabet, vocabulary, citations, fragments, grammar, mcQuestions, exam, chapters)
-  db/        # sql.js Init (database.ts) + Fortschritt/Achievements (store.ts)
-  modes/     # die 9 Lernmodi
-  pages/     # Home, ChapterView, Reference (Stoff lesen), Stats
-  components/ # UI-Primitive, ModeShell, ModeRouter, AchievementToast
-  state/     # AppContext (reaktiver Zustand über der DB)
-  lib/       # Text-Normalisierung & Content-Selektoren
-```
+- Framework: Vite
+- Build command: `npm run build`
+- Output directory: `dist`
+- Environment variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`

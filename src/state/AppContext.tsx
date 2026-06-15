@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { initDb } from '../db/database'
 import {
-  clearSession, createUser, hasSession, listUsers, loadSession, setSession, type User,
+  clearSession, createUser, getUser, hasSession, listUsers, loadSession, setSession, type User,
 } from '../db/auth'
 import {
   addXp, completeChapter, getChapterProgress, getExams, getGame, levelForXp, levelTitle,
@@ -13,14 +13,13 @@ const EMPTY_GAME: GameState = { xp: 0, streak_days: 0, last_day: null, total_cor
 
 interface AppState {
   ready: boolean
-  // session
+  error: string | null
   user: User | null
   users: User[]
-  login: (id: number) => void
-  createAccount: (name: string, avatar: string) => User
-  logout: () => void
-  refreshUsers: () => void
-  // game (current user)
+  login: (id: number) => Promise<void>
+  createAccount: (name: string, avatar: string) => Promise<User>
+  logout: () => Promise<void>
+  refreshUsers: () => Promise<void>
   game: GameState
   level: number
   levelTitle: string
@@ -30,21 +29,21 @@ interface AppState {
   chapters: Record<string, ChapterRow>
   bestExam: number
   toast: AchievementDef | null
-  // actions
-  award: (correct: boolean, opts?: { itemId?: string; xp?: number }) => void
-  start: (chapterId: string, mode?: string) => void
-  checkpoint: (chapterId: string, progress: number, mode?: string) => void
-  finishMode: (chapterId: string, modeId: string, score: number) => void
-  finishChapter: (chapterId: string) => void
-  saveExam: (points: number, total: number, grade: string) => void
+  award: (correct: boolean, opts?: { itemId?: string; xp?: number }) => Promise<void>
+  start: (chapterId: string, mode?: string) => Promise<void>
+  checkpoint: (chapterId: string, progress: number, mode?: string) => Promise<void>
+  finishMode: (chapterId: string, modeId: string, score: number) => Promise<void>
+  finishChapter: (chapterId: string) => Promise<void>
+  saveExam: (points: number, total: number, grade: string) => Promise<void>
   dismissToast: () => void
-  refresh: () => void
+  refresh: () => Promise<void>
 }
 
 const Ctx = createContext<AppState | null>(null)
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [user, setUser] = useState<User | null>(null)
   const [users, setUsers] = useState<User[]>([])
   const [game, setGame] = useState<GameState>(EMPTY_GAME)
@@ -53,32 +52,62 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [queue, setQueue] = useState<AchievementDef[]>([])
   const [toast, setToast] = useState<AchievementDef | null>(null)
 
-  const refreshUsers = useCallback(() => setUsers(listUsers()), [])
-
-  const refresh = useCallback(() => {
-    if (!hasSession()) { setGame(EMPTY_GAME); setChapters({}); setBestExam(0); return }
-    setGame(getGame())
-    setChapters(getChapterProgress())
-    setBestExam(getExams().reduce((m, e) => Math.max(m, e.points), 0))
+  const handleError = useCallback((e: unknown) => {
+    const message = e instanceof Error ? e.message : 'Unerwarteter Supabase-Fehler'
+    setError(message)
+    throw e
   }, [])
+
+  const refreshUsers = useCallback(async () => {
+    try { setUsers(await listUsers()) }
+    catch (e) { handleError(e) }
+  }, [handleError])
+
+  const refresh = useCallback(async () => {
+    try {
+      if (!hasSession()) {
+        setGame(EMPTY_GAME)
+        setChapters({})
+        setBestExam(0)
+        return
+      }
+      const [nextGame, nextChapters, exams] = await Promise.all([getGame(), getChapterProgress(), getExams()])
+      setGame(nextGame)
+      setChapters(nextChapters)
+      setBestExam(exams.reduce((m, e) => Math.max(m, e.points), 0))
+    } catch (e) {
+      handleError(e)
+    }
+  }, [handleError])
 
   useEffect(() => {
     let alive = true
-    initDb().then(() => {
-      if (!alive) return
-      const id = loadSession()
-      refreshUsers()
-      if (id != null) {
-        const u = listUsers().find((x) => x.id === id) ?? null
-        setUser(u)
-        if (u) { touchStreak(); refresh() }
-      }
-      setReady(true)
-    })
+    initDb()
+      .then(async () => {
+        if (!alive) return
+        const id = await loadSession()
+        const nextUsers = await listUsers()
+        if (!alive) return
+        setUsers(nextUsers)
+        if (id != null) {
+          const u = await getUser(id)
+          if (!alive) return
+          setUser(u ?? null)
+          if (u) {
+            await touchStreak()
+            await refresh()
+          }
+        }
+        setReady(true)
+      })
+      .catch((e) => {
+        if (!alive) return
+        setError(e instanceof Error ? e.message : 'Supabase konnte nicht geladen werden')
+        setReady(true)
+      })
     return () => { alive = false }
-  }, [refresh, refreshUsers])
+  }, [refresh])
 
-  // achievement toast pump
   useEffect(() => {
     if (!toast && queue.length) {
       setToast(queue[0])
@@ -86,71 +115,117 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [toast, queue])
 
-  const runAchievements = useCallback(() => {
+  const runAchievements = useCallback(async () => {
     if (!hasSession()) return
-    const fresh = syncAchievements({ game: getGame(), chapters: getChapterProgress(), bestExam: getExams().reduce((m, e) => Math.max(m, e.points), 0) })
+    const [nextGame, nextChapters, exams] = await Promise.all([getGame(), getChapterProgress(), getExams()])
+    const fresh = await syncAchievements({
+      game: nextGame,
+      chapters: nextChapters,
+      bestExam: exams.reduce((m, e) => Math.max(m, e.points), 0),
+    })
     if (fresh.length) setQueue((q) => [...q, ...fresh])
   }, [])
 
-  // ----- session actions -----
-  const applyUser = useCallback((u: User) => {
-    setSession(u.id)
+  const applyUser = useCallback(async (u: User) => {
+    await setSession(u.id)
     setUser(u)
-    touchStreak()
-    refresh()
-    refreshUsers()
+    await touchStreak()
+    await refresh()
+    await refreshUsers()
   }, [refresh, refreshUsers])
 
-  const login = useCallback((id: number) => {
-    const u = listUsers().find((x) => x.id === id)
-    if (u) applyUser(u)
-  }, [applyUser])
+  const login = useCallback(async (id: number) => {
+    try {
+      const u = await getUser(id)
+      if (u) await applyUser(u)
+    } catch (e) {
+      handleError(e)
+    }
+  }, [applyUser, handleError])
 
-  const createAccount = useCallback((name: string, avatar: string) => {
-    const u = createUser(name, avatar)
-    applyUser(u)
-    return u
-  }, [applyUser])
+  const createAccount = useCallback(async (name: string, avatar: string) => {
+    try {
+      const u = await createUser(name, avatar)
+      await applyUser(u)
+      return u
+    } catch (e) {
+      handleError(e)
+      throw e
+    }
+  }, [applyUser, handleError])
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
     clearSession()
     setUser(null)
     setGame(EMPTY_GAME)
     setChapters({})
     setBestExam(0)
-    refreshUsers()
+    await refreshUsers()
   }, [refreshUsers])
 
-  // ----- game actions -----
-  const award = useCallback<AppState['award']>((correct, opts) => {
-    touchStreak()
-    recordAnswer(correct, opts?.itemId)
-    if (correct) addXp(opts?.xp ?? 10)
-    setGame(getGame())
-    runAchievements()
-  }, [runAchievements])
+  const award = useCallback<AppState['award']>(async (correct, opts) => {
+    try {
+      await touchStreak()
+      await recordAnswer(correct, opts?.itemId)
+      if (correct) await addXp(opts?.xp ?? 10)
+      setGame(await getGame())
+      await runAchievements()
+    } catch (e) {
+      handleError(e)
+    }
+  }, [handleError, runAchievements])
 
-  const start = useCallback<AppState['start']>((id, mode) => { startChapter(id, mode); setChapters(getChapterProgress()) }, [])
-  const checkpoint = useCallback<AppState['checkpoint']>((id, p, mode) => { saveCheckpoint(id, p, mode); setChapters(getChapterProgress()) }, [])
-  const finishMode = useCallback<AppState['finishMode']>((c, m, s) => { recordMode(c, m, s); runAchievements() }, [runAchievements])
-  const finishChapter = useCallback<AppState['finishChapter']>((id) => {
-    completeChapter(id); addXp(50); setChapters(getChapterProgress()); setGame(getGame()); runAchievements()
-  }, [runAchievements])
-  const saveExam = useCallback<AppState['saveExam']>((p, t, g) => {
-    recordExam(p, t, g); addXp(Math.round(p / 2)); refresh(); runAchievements()
-  }, [refresh, runAchievements])
+  const start = useCallback<AppState['start']>(async (id, mode) => {
+    try {
+      await startChapter(id, mode)
+      setChapters(await getChapterProgress())
+    } catch (e) { handleError(e) }
+  }, [handleError])
+
+  const checkpoint = useCallback<AppState['checkpoint']>(async (id, p, mode) => {
+    try {
+      await saveCheckpoint(id, p, mode)
+      setChapters(await getChapterProgress())
+    } catch (e) { handleError(e) }
+  }, [handleError])
+
+  const finishMode = useCallback<AppState['finishMode']>(async (c, m, s) => {
+    try {
+      await recordMode(c, m, s)
+      await runAchievements()
+    } catch (e) { handleError(e) }
+  }, [handleError, runAchievements])
+
+  const finishChapter = useCallback<AppState['finishChapter']>(async (id) => {
+    try {
+      await completeChapter(id)
+      await addXp(50)
+      setChapters(await getChapterProgress())
+      setGame(await getGame())
+      await runAchievements()
+    } catch (e) { handleError(e) }
+  }, [handleError, runAchievements])
+
+  const saveExam = useCallback<AppState['saveExam']>(async (p, t, g) => {
+    try {
+      await recordExam(p, t, g)
+      await addXp(Math.round(p / 2))
+      await refresh()
+      await runAchievements()
+    } catch (e) { handleError(e) }
+  }, [handleError, refresh, runAchievements])
 
   const dismissToast = useCallback(() => setToast(null), [])
 
   const lv = levelForXp(game.xp)
 
   const value = useMemo<AppState>(() => ({
-    ready, user, users, login, createAccount, logout, refreshUsers,
+    ready, error, user, users, login, createAccount, logout, refreshUsers,
     game,
     level: lv.level, levelTitle: levelTitle(lv.level), levelPct: lv.pct, levelInto: lv.into, levelNeed: lv.need,
     chapters, bestExam, toast,
     award, start, checkpoint, finishMode, finishChapter, saveExam, dismissToast, refresh,
-  }), [ready, user, users, login, createAccount, logout, refreshUsers, game, lv.level, lv.pct, lv.into, lv.need, chapters, bestExam, toast, award, start, checkpoint, finishMode, finishChapter, saveExam, dismissToast, refresh])
+  }), [ready, error, user, users, login, createAccount, logout, refreshUsers, game, lv.level, lv.pct, lv.into, lv.need, chapters, bestExam, toast, award, start, checkpoint, finishMode, finishChapter, saveExam, dismissToast, refresh])
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }

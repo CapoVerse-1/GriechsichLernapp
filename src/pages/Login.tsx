@@ -10,8 +10,8 @@ export function Login() {
   const [avatar, setAvatar] = useState(AVATARS[0])
   const [err, setErr] = useState('')
 
-  const create = () => {
-    try { setErr(''); app.createAccount(name, avatar) }
+  const create = async () => {
+    try { setErr(''); await app.createAccount(name, avatar) }
     catch (e) { setErr(e instanceof Error ? e.message : 'Fehler') }
   }
 
@@ -56,7 +56,7 @@ export function Login() {
               <input
                 value={name} autoFocus maxLength={20}
                 onChange={(e) => setName(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter' && name.trim()) create() }}
+                onKeyDown={(e) => { if (e.key === 'Enter' && name.trim()) void create() }}
                 placeholder="z.B. Hannah"
                 className="w-full rounded-2xl border-2 border-ink/15 bg-white px-5 py-4 text-lg font-semibold outline-none focus:border-teal-400"
               />

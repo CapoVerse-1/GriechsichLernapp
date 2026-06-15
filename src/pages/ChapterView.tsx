@@ -16,7 +16,12 @@ export function ChapterView({
   const [modeProg, setModeProg] = useState<Record<string, ModeRow>>({})
 
   useEffect(() => {
-    if (chapterId) { app.start(chapterId); setModeProg(getModeProgress(chapterId)) }
+    let alive = true
+    if (chapterId) {
+      app.start(chapterId)
+      getModeProgress(chapterId).then((rows) => { if (alive) setModeProg(rows) })
+    }
+    return () => { alive = false }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterId])
 

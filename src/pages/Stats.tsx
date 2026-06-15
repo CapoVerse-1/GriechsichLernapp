@@ -1,4 +1,5 @@
-import { ACHIEVEMENTS, getExams, getUnlocked, resetCurrentUser } from '../db/store'
+import { useEffect, useState } from 'react'
+import { ACHIEVEMENTS, getExams, getUnlocked, resetCurrentUser, type ExamRow } from '../db/store'
 import { persistNow } from '../db/database'
 import { gradeFor } from '../content/exam'
 import { Button, ProgressBar, ScreenHeader } from '../components/ui'
@@ -6,15 +7,27 @@ import { useApp } from '../state/AppContext'
 
 export function Stats({ onBack, onLeaderboard }: { onBack: () => void; onLeaderboard: () => void }) {
   const app = useApp()
-  const unlocked = getUnlocked()
-  const exams = getExams()
+  const [unlocked, setUnlocked] = useState<Set<string>>(new Set())
+  const [exams, setExams] = useState<ExamRow[]>([])
   const acc = app.game.total_answers ? Math.round((app.game.total_correct / app.game.total_answers) * 100) : 0
 
-  const reset = () => {
+  const refreshStats = async () => {
+    const [nextUnlocked, nextExams] = await Promise.all([getUnlocked(), getExams()])
+    setUnlocked(nextUnlocked)
+    setExams(nextExams)
+  }
+
+  useEffect(() => {
+    refreshStats()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [app.game, app.bestExam])
+
+  const reset = async () => {
     if (confirm(`Wirklich den Fortschritt von ${app.user?.name} löschen? Das kann nicht rückgängig gemacht werden.`)) {
-      resetCurrentUser()
+      await resetCurrentUser()
       persistNow()
-      app.refresh()
+      await app.refresh()
+      await refreshStats()
     }
   }
 
@@ -43,7 +56,6 @@ export function Stats({ onBack, onLeaderboard }: { onBack: () => void; onLeaderb
         </div>
       </div>
 
-      {/* Achievements */}
       <div className="px-4 pt-6">
         <h2 className="mb-3 px-1 text-sm font-black uppercase tracking-wide text-ink-faint">Erfolge · {unlocked.size}/{ACHIEVEMENTS.length}</h2>
         <div className="grid grid-cols-2 gap-3">
@@ -61,7 +73,6 @@ export function Stats({ onBack, onLeaderboard }: { onBack: () => void; onLeaderb
         </div>
       </div>
 
-      {/* Exam history */}
       {exams.length > 0 && (
         <div className="px-4 pt-6">
           <h2 className="mb-3 px-1 text-sm font-black uppercase tracking-wide text-ink-faint">Klausur-Verlauf</h2>

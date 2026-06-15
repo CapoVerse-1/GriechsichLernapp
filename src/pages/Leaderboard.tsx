@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { leaderboard, type LeaderRow } from '../db/auth'
 import { levelTitle } from '../db/store'
 import { ScreenHeader } from '../components/ui'
@@ -18,11 +18,17 @@ const MEDAL = ['🥇', '🥈', '🥉']
 export function Leaderboard({ onBack }: { onBack: () => void }) {
   const app = useApp()
   const [metric, setMetric] = useState<Metric>('xp')
+  const [data, setData] = useState<LeaderRow[]>([])
+
+  useEffect(() => {
+    let alive = true
+    leaderboard().then((rows) => { if (alive) setData(rows) })
+    return () => { alive = false }
+  }, [app.game, app.user?.id])
+
   const rows = useMemo(() => {
-    const data = leaderboard()
     return [...data].sort((a, b) => (b[metric] as number) - (a[metric] as number) || b.xp - a.xp)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metric, app.game])
+  }, [metric, data])
 
   const active = METRICS.find((m) => m.id === metric)!
   const top = rows.slice(0, 3)
