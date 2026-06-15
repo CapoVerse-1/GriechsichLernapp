@@ -80,12 +80,12 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
   }
 
   const step = steps[i]
-  const next = (pts: number) => {
+  const next = async (pts: number) => {
     const ne = earned + pts
     setEarned(ne)
     if (i + 1 >= steps.length) {
       const total = Math.round(ne)
-      app.saveExam(total, TOTAL_POINTS, gradeFor(total).grade)
+      await app.saveExam(total, TOTAL_POINTS, gradeFor(total).grade)
       setDone(true)
     } else { setI(i + 1); setVal(''); setPicked(new Set()); setPhase('answer') }
   }
@@ -94,12 +94,12 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
   const submitType = () => {
     const ok = answerMatches(val, step.kind === 'type' ? step.answer : '', [], (step as any).toGreek ? 'lat2gr' : 'gr2lat')
     const pts = ok ? step.pts : 0
-    setGotPts(pts); app.award(ok, { xp: 6 }); setPhase('review')
+    setGotPts(pts); void app.award(ok, { xp: 6 }); setPhase('review')
   }
   const submitVocab = () => {
     const ok = step.kind === 'vocab' && germanMatches(val, step.de)
     const pts = ok ? step.pts : 0
-    setGotPts(pts); app.award(ok, { xp: 6 }); setPhase('review')
+    setGotPts(pts); void app.award(ok, { xp: 6 }); setPhase('review')
   }
   const submitMc = () => {
     if (step.kind !== 'mc') return
@@ -107,7 +107,7 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
     let ok = picked.size === want.size
     for (const p of picked) if (!want.has(p)) ok = false
     const pts = ok ? step.pts : 0
-    setGotPts(pts); app.award(ok, { xp: 6 }); setPhase('review')
+    setGotPts(pts); void app.award(ok, { xp: 6 }); setPhase('review')
   }
 
   const sec = step.sec
@@ -216,13 +216,13 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
 
           {phase === 'review' && step.kind === 'self' && (
             <div className="grid grid-cols-3 gap-2">
-              <button onClick={() => { app.award(false); next(0) }} className="rounded-2xl bg-orange-50 py-3 text-sm font-bold text-coral-600 tap border-2 border-orange-200">Nicht<br />0 P</button>
-              <button onClick={() => { app.award(true, { xp: 4 }); next(step.pts / 2) }} className="rounded-2xl bg-amber-50 py-3 text-sm font-bold text-sun-600 tap border-2 border-amber-200">Teilweise<br />{Math.round(step.pts / 2)} P</button>
-              <button onClick={() => { app.award(true, { xp: 8 }); next(step.pts) }} className="rounded-2xl bg-teal-600 py-3 text-sm font-bold text-white tap shadow-float">Voll<br />{step.pts} P</button>
+              <button onClick={async () => { await app.award(false); await next(0) }} className="rounded-2xl bg-orange-50 py-3 text-sm font-bold text-coral-600 tap border-2 border-orange-200">Nicht<br />0 P</button>
+              <button onClick={async () => { await app.award(true, { xp: 4 }); await next(step.pts / 2) }} className="rounded-2xl bg-amber-50 py-3 text-sm font-bold text-sun-600 tap border-2 border-amber-200">Teilweise<br />{Math.round(step.pts / 2)} P</button>
+              <button onClick={async () => { await app.award(true, { xp: 8 }); await next(step.pts) }} className="rounded-2xl bg-teal-600 py-3 text-sm font-bold text-white tap shadow-float">Voll<br />{step.pts} P</button>
             </div>
           )}
           {phase === 'review' && step.kind !== 'self' && (
-            <button onClick={() => next(gotPts)} className={`flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-bold text-white tap shadow-float ${gotPts > 0 ? 'bg-teal-600' : 'bg-coral-500'}`}>
+            <button onClick={() => { void next(gotPts) }} className={`flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-bold text-white tap shadow-float ${gotPts > 0 ? 'bg-teal-600' : 'bg-coral-500'}`}>
               {gotPts > 0 ? `✓ +${gotPts % 1 === 0 ? gotPts : gotPts.toFixed(1)} Punkte` : '✕ 0 Punkte'} · {i + 1 >= steps.length ? 'Auswerten' : 'Weiter'}
             </button>
           )}

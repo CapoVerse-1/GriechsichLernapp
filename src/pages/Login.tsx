@@ -11,15 +11,25 @@ export function Login() {
   const [err, setErr] = useState('')
 
   const create = async () => {
-    try { setErr(''); await app.createAccount(name, avatar) }
-    catch (e) { setErr(e instanceof Error ? e.message : 'Fehler') }
+    try {
+      setErr('')
+      await app.createAccount(name, avatar)
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'Fehler')
+    }
   }
 
   return (
     <div className="app-shell flex min-h-screen flex-col px-5 pb-10 safe-top">
       <div className="pt-10 text-center">
-        <motion.div initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 14 }}
-          className="mx-auto grid h-20 w-20 place-items-center rounded-3xl bg-gradient-to-br from-teal-600 to-teal-800 font-serif text-5xl font-black text-white shadow-float">Σ</motion.div>
+        <motion.div
+          initial={{ scale: 0.6, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 14 }}
+          className="mx-auto grid h-20 w-20 place-items-center rounded-3xl bg-gradient-to-br from-teal-600 to-teal-800 font-serif text-5xl font-black text-white shadow-float"
+        >
+          Σ
+        </motion.div>
         <h1 className="mt-4 font-serif text-3xl font-black text-ink">Graecia</h1>
         <p className="mt-1 text-sm text-ink-faint">Wähle dein Profil oder leg ein neues an</p>
       </div>
@@ -27,24 +37,25 @@ export function Login() {
       <div className="mt-8 flex-1">
         {mode === 'pick' && (
           <div className="space-y-3">
-            {app.users.map((u, idx) => {
-              return (
-                <motion.button
-                  key={u.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}
-                  onClick={() => app.login(u.id)}
-                  className="flex w-full items-center gap-4 rounded-3xl bg-white p-4 text-left shadow-card tap"
-                >
-                  <span className="grid h-14 w-14 place-items-center rounded-2xl bg-parchment-deep text-3xl">{u.avatar}</span>
-                  <div className="flex-1">
-                    <p className="text-lg font-extrabold text-ink">{u.name}</p>
-                    <p className="text-xs text-ink-faint">Profil öffnen</p>
-                  </div>
-                  <span className="text-xl text-ink-faint">→</span>
-                </motion.button>
-              )
-            })}
+            {app.users.map((u, idx) => (
+              <motion.button
+                key={u.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                onClick={() => { void app.login(u.id) }}
+                className="flex w-full items-center gap-4 rounded-3xl bg-white p-4 text-left shadow-card tap"
+              >
+                <span className="grid h-14 w-14 place-items-center rounded-2xl bg-parchment-deep text-3xl">{u.avatar}</span>
+                <div className="flex-1">
+                  <p className="text-lg font-extrabold text-ink">{u.name}</p>
+                  <p className="text-xs text-ink-faint">Profil öffnen</p>
+                </div>
+                <span className="text-xl text-ink-faint">→</span>
+              </motion.button>
+            ))}
             <button onClick={() => { setMode('create'); setErr('') }} className="flex w-full items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-ink/15 bg-white/40 p-4 font-bold text-ink/60 tap">
-              ＋ Neues Profil anlegen
+              + Neues Profil anlegen
             </button>
           </div>
         )}
@@ -54,7 +65,9 @@ export function Login() {
             <div>
               <label className="mb-2 block text-xs font-black uppercase tracking-wide text-ink-faint">Dein Name</label>
               <input
-                value={name} autoFocus maxLength={20}
+                value={name}
+                autoFocus
+                maxLength={20}
                 onChange={(e) => setName(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && name.trim()) void create() }}
                 placeholder="z.B. Hannah"
@@ -65,8 +78,11 @@ export function Login() {
               <label className="mb-2 block text-xs font-black uppercase tracking-wide text-ink-faint">Avatar</label>
               <div className="grid grid-cols-6 gap-2">
                 {AVATARS.map((a) => (
-                  <button key={a} onClick={() => setAvatar(a)}
-                    className={`grid aspect-square place-items-center rounded-2xl text-2xl tap transition ${avatar === a ? 'bg-teal-600 ring-2 ring-teal-300 scale-105' : 'bg-white shadow-card'}`}>
+                  <button
+                    key={a}
+                    onClick={() => setAvatar(a)}
+                    className={`grid aspect-square place-items-center rounded-2xl text-2xl tap transition ${avatar === a ? 'bg-teal-600 ring-2 ring-teal-300 scale-105' : 'bg-white shadow-card'}`}
+                  >
                     {a}
                   </button>
                 ))}
@@ -83,7 +99,7 @@ export function Login() {
         )}
       </div>
 
-      <p className="pt-6 text-center text-[11px] text-ink-faint">Kein Passwort nötig · bis zu mehreren Profilen · Fortschritt lokal in SQLite</p>
+      <p className="pt-6 text-center text-[11px] text-ink-faint">Kein Passwort nötig · bis zu mehreren Profilen · Fortschritt in Supabase</p>
     </div>
   )
 }

@@ -36,10 +36,6 @@ export function assertOk(error: unknown) {
   throw new Error('Supabase request failed')
 }
 
-export function persistNow() {
-  // Supabase writes are persisted immediately.
-}
-
 export function resetAll() {
   localStorage.removeItem('graecia_current_user')
 }

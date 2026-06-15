@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
+import { useEffect, useMemo, useState } from 'react'
 import { CHAPTERS } from '../content/chapters'
 import { ProgressBar, accent } from '../components/ui'
+import { getAllModeProgress, type ModeRow } from '../db/store'
 import { useApp } from '../state/AppContext'
 
 function StatChip({ icon, value, label, tone }: { icon: string; value: string | number; label: string; tone: string }) {
@@ -17,11 +19,37 @@ function StatChip({ icon, value, label, tone }: { icon: string; value: string | 
 
 export function Home({ onChapter, onExam, onStats, onLeaderboard }: { onChapter: (id: string) => void; onExam: () => void; onStats: () => void; onLeaderboard: () => void }) {
   const app = useApp()
+  const [modeRows, setModeRows] = useState<ModeRow[]>([])
+  const [modeRowsLoaded, setModeRowsLoaded] = useState(false)
   const doneCount = Object.values(app.chapters).filter((c) => c.status === 'done').length
+
+  const modesByChapter = useMemo(() => {
+    const map: Record<string, Record<string, ModeRow>> = {}
+    for (const row of modeRows) {
+      map[row.chapter_id] ??= {}
+      map[row.chapter_id][row.mode_id] = row
+    }
+    return map
+  }, [modeRows])
+
+  useEffect(() => {
+    let alive = true
+    setModeRowsLoaded(false)
+    getAllModeProgress()
+      .then((rows) => {
+        if (!alive) return
+        setModeRows(rows)
+        setModeRowsLoaded(true)
+      })
+      .catch(() => {
+        if (!alive) return
+        setModeRowsLoaded(true)
+      })
+    return () => { alive = false }
+  }, [app.user?.id, app.chapters])
 
   return (
     <div className="app-shell pb-24">
-      {/* Hero */}
       <div className="safe-top px-4 pt-3">
         <div className="flex items-start justify-between">
           <button onClick={onStats} className="flex items-center gap-2 text-left tap">
@@ -37,7 +65,6 @@ export function Home({ onChapter, onExam, onStats, onLeaderboard }: { onChapter:
           </div>
         </div>
 
-        {/* Level card */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 rounded-3xl bg-gradient-to-br from-teal-600 to-teal-800 p-5 text-white shadow-float">
           <div className="flex items-center justify-between">
             <div>
@@ -59,7 +86,6 @@ export function Home({ onChapter, onExam, onStats, onLeaderboard }: { onChapter:
         </div>
       </div>
 
-      {/* Exam CTA */}
       <div className="px-4 pt-5">
         <motion.button whileTap={{ scale: 0.98 }} onClick={onExam} className="relative w-full overflow-hidden rounded-3xl bg-ink p-5 text-left text-white shadow-float">
           <div className="relative z-10 flex items-center gap-4">
@@ -74,7 +100,6 @@ export function Home({ onChapter, onExam, onStats, onLeaderboard }: { onChapter:
         </motion.button>
       </div>
 
-      {/* Chapters */}
       <div className="px-4 pt-6">
         <h2 className="mb-3 px-1 text-sm font-black uppercase tracking-wide text-ink-faint">Kapitel</h2>
         <div className="space-y-3">
@@ -82,7 +107,11 @@ export function Home({ onChapter, onExam, onStats, onLeaderboard }: { onChapter:
             const prog = app.chapters[c.id]
             const a = accent(c.accent)
             const status = prog?.status ?? 'new'
-            const pct = status === 'done' ? 1 : prog?.progress ?? 0
+            const completedModes = c.modes.filter((m) => (modesByChapter[c.id]?.[m]?.best_score ?? 0) >= 0.6).length
+            const modePct = completedModes / c.modes.length
+            const displayStatus = status !== 'new' ? status : completedModes > 0 ? 'in_progress' : 'new'
+            const pct = displayStatus === 'done' ? 1 : modeRowsLoaded ? modePct : prog?.progress ?? 0
+
             return (
               <motion.button
                 key={c.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.04 }}
@@ -93,12 +122,12 @@ export function Home({ onChapter, onExam, onStats, onLeaderboard }: { onChapter:
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className="text-[11px] font-bold text-ink-faint">KAPITEL {c.num}</span>
-                    {status === 'done' && <span className="rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-black text-teal-700">✓ FERTIG</span>}
-                    {status === 'in_progress' && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-black text-sun-600">LÄUFT</span>}
+                    {displayStatus === 'done' && <span className="rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-black text-teal-700">✓ FERTIG</span>}
+                    {displayStatus === 'in_progress' && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-black text-sun-600">LÄUFT</span>}
                   </div>
                   <p className="truncate font-extrabold text-ink">{c.title}</p>
                   <p className="truncate text-xs text-ink-faint">{c.subtitle}</p>
-                  {(status !== 'new') && <ProgressBar pct={pct} accentKey={c.accent} className="mt-2" height="h-1.5" />}
+                  {displayStatus !== 'new' && <ProgressBar pct={pct} accentKey={c.accent} className="mt-2" height="h-1.5" />}
                 </div>
                 <span className="text-xl text-ink-faint">→</span>
               </motion.button>
@@ -108,7 +137,7 @@ export function Home({ onChapter, onExam, onStats, onLeaderboard }: { onChapter:
       </div>
 
       <p className="px-6 pt-8 text-center text-[11px] leading-relaxed text-ink-faint">
-        Stoff aus 16 Handouts der VO „Griechische Terminologie" (Univ. Wien).<br />Dein Fortschritt wird lokal in SQLite gespeichert.
+        Stoff aus 16 Handouts der VO "Griechische Terminologie" (Univ. Wien).<br />Dein Fortschritt wird in Supabase gespeichert.
       </p>
     </div>
   )

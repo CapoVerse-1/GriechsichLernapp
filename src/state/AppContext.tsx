@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { initDb } from '../db/database'
 import {
   clearSession, createUser, getUser, hasSession, listUsers, loadSession, setSession, type User,
@@ -51,10 +51,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [bestExam, setBestExam] = useState(0)
   const [queue, setQueue] = useState<AchievementDef[]>([])
   const [toast, setToast] = useState<AchievementDef | null>(null)
+  const awardQueue = useRef(Promise.resolve())
 
   const handleError = useCallback((e: unknown) => {
-    const message = e instanceof Error ? e.message : 'Unerwarteter Supabase-Fehler'
-    setError(message)
+    console.error(e)
     throw e
   }, [])
 
@@ -164,15 +164,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [refreshUsers])
 
   const award = useCallback<AppState['award']>(async (correct, opts) => {
-    try {
+    const job = awardQueue.current.then(async () => {
       await touchStreak()
       await recordAnswer(correct, opts?.itemId)
       if (correct) await addXp(opts?.xp ?? 10)
       setGame(await getGame())
       await runAchievements()
-    } catch (e) {
-      handleError(e)
-    }
+    })
+    awardQueue.current = job.catch(() => undefined)
+    try { await job }
+    catch (e) { handleError(e) }
   }, [handleError, runAchievements])
 
   const start = useCallback<AppState['start']>(async (id, mode) => {

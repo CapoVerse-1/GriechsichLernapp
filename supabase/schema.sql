@@ -69,6 +69,7 @@ create index if not exists mode_progress_user_chapter_idx on public.mode_progres
 create index if not exists item_stats_user_idx on public.item_stats(user_id);
 create index if not exists achievements_user_idx on public.achievements(user_id);
 create index if not exists exam_results_user_at_idx on public.exam_results(user_id, at desc);
+create unique index if not exists users_name_lower_idx on public.users (lower(name));
 
 alter table public.users enable row level security;
 alter table public.chapter_progress enable row level security;

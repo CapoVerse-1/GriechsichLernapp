@@ -90,6 +90,7 @@ export async function createUser(name: string, avatar: string): Promise<User> {
     .insert({ name: clean, avatar })
     .select('*')
     .single()
+  if (error && 'code' in error && error.code === '23505') throw new Error('Dieser Name ist bereits vergeben')
   assertOk(error)
 
   const user = toUser(data)

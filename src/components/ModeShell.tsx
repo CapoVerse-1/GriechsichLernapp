@@ -1,16 +1,21 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { ProgressBar, accent } from './ui'
 
 export function ModeShell({
   step, total, accentKey = 'teal', onClose, lives, children,
 }: {
-  step: number; total: number; accentKey?: string; onClose: () => void; lives?: number; children: ReactNode
+  step: number
+  total: number
+  accentKey?: string
+  onClose: () => void
+  lives?: number
+  children: ReactNode
 }) {
   return (
     <div className="flex min-h-screen flex-col">
       <div className="safe-top flex items-center gap-3 px-4 pb-1 pt-2">
-        <button onClick={onClose} aria-label="Schließen" className="grid h-9 w-9 place-items-center rounded-full text-ink/50 tap text-xl">✕</button>
+        <button onClick={onClose} aria-label="Schließen" className="grid h-9 w-9 place-items-center rounded-full text-ink/50 tap text-xl">×</button>
         <ProgressBar pct={total ? step / total : 0} accentKey={accentKey} className="flex-1" height="h-3" />
         {lives !== undefined && (
           <div className="flex items-center gap-0.5 text-sm font-bold text-coral-500">
@@ -28,7 +33,10 @@ export function ModeShell({
 export function FeedbackBar({
   state, correctText, onContinue, continueLabel = 'Weiter',
 }: {
-  state: 'correct' | 'wrong'; correctText?: ReactNode; onContinue: () => void; continueLabel?: string
+  state: 'correct' | 'wrong'
+  correctText?: ReactNode
+  onContinue: () => void
+  continueLabel?: string
 }) {
   const ok = state === 'correct'
   return (
@@ -39,7 +47,7 @@ export function FeedbackBar({
     >
       <div className="mx-auto max-w-[460px]">
         <div className="mb-3 flex items-center gap-2">
-          <span className={`grid h-9 w-9 place-items-center rounded-full text-white ${ok ? 'bg-teal-600' : 'bg-coral-500'}`}>{ok ? '✓' : '✕'}</span>
+          <span className={`grid h-9 w-9 place-items-center rounded-full text-white ${ok ? 'bg-teal-600' : 'bg-coral-500'}`}>{ok ? '✓' : '×'}</span>
           <div className="min-w-0">
             <p className={`font-extrabold ${ok ? 'text-teal-700' : 'text-coral-600'}`}>{ok ? 'Richtig!' : 'Nicht ganz.'}</p>
             {correctText && <p className="truncate text-sm text-ink-soft">{correctText}</p>}
@@ -88,14 +96,30 @@ export function Celebrate({ show }: { show: boolean }) {
 export function ResultScreen({
   scorePct, correct, total, xp, accentKey = 'teal', onRetry, onDone, extra,
 }: {
-  scorePct: number; correct: number; total: number; xp: number; accentKey?: string
-  onRetry: () => void; onDone: () => void; extra?: ReactNode
+  scorePct: number
+  correct: number
+  total: number
+  xp: number
+  accentKey?: string
+  onRetry: () => void
+  onDone: () => void | Promise<void>
+  extra?: ReactNode
 }) {
+  const [saving, setSaving] = useState(false)
   const a = accent(accentKey)
   const great = scorePct >= 0.8
   const ok = scorePct >= 0.5
   const emoji = great ? '🏆' : ok ? '🌿' : '📚'
   const msg = great ? 'Hervorragend!' : ok ? 'Gut gemacht!' : 'Weiter üben!'
+
+  const done = async () => {
+    if (saving) return
+    setSaving(true)
+    try { await onDone() }
+    catch (e) { console.error(e) }
+    finally { setSaving(false) }
+  }
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center">
       <Celebrate show={great} />
@@ -118,8 +142,8 @@ export function ResultScreen({
       </div>
       {extra}
       <div className="flex w-full max-w-xs flex-col gap-2 pt-2">
-        <button onClick={onRetry} className={`w-full rounded-2xl ${a.bg} py-3.5 font-bold text-white tap shadow-float`}>Nochmal</button>
-        <button onClick={onDone} className="w-full rounded-2xl bg-white py-3.5 font-bold text-ink/70 tap border-2 border-ink/10">Fertig</button>
+        <button onClick={onRetry} disabled={saving} className={`w-full rounded-2xl ${a.bg} py-3.5 font-bold text-white tap shadow-float disabled:opacity-50`}>Nochmal</button>
+        <button onClick={done} disabled={saving} className="w-full rounded-2xl bg-white py-3.5 font-bold text-ink/70 tap border-2 border-ink/10 disabled:opacity-50">{saving ? 'Speichert...' : 'Fertig'}</button>
       </div>
     </div>
   )

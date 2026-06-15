@@ -82,9 +82,9 @@ export default function App() {
           chapterId={view.chapterId}
           accentKey={MODES[view.mode].accent}
           onClose={() => setView({ v: 'chapter', chapterId: view.chapterId })}
-          onFinish={(score) => {
-            app.finishMode(view.chapterId, view.mode, score)
-            app.checkpoint(view.chapterId, Math.max(score, app.chapters[view.chapterId]?.progress ?? 0), view.mode)
+          onFinish={async (score) => {
+            await app.finishMode(view.chapterId, view.mode, score)
+            await app.checkpoint(view.chapterId, Math.max(score, app.chapters[view.chapterId]?.progress ?? 0), view.mode)
             setView({ v: 'chapter', chapterId: ch.id })
           }}
         />

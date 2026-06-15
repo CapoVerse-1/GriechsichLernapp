@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { ACHIEVEMENTS, getExams, getUnlocked, resetCurrentUser, type ExamRow } from '../db/store'
-import { persistNow } from '../db/database'
 import { gradeFor } from '../content/exam'
 import { Button, ProgressBar, ScreenHeader } from '../components/ui'
 import { useApp } from '../state/AppContext'
@@ -25,7 +24,6 @@ export function Stats({ onBack, onLeaderboard }: { onBack: () => void; onLeaderb
   const reset = async () => {
     if (confirm(`Wirklich den Fortschritt von ${app.user?.name} löschen? Das kann nicht rückgängig gemacht werden.`)) {
       await resetCurrentUser()
-      persistNow()
       await app.refresh()
       await refreshStats()
     }
