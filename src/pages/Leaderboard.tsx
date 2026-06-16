@@ -4,13 +4,14 @@ import { leaderboard, type LeaderRow } from '../db/auth'
 import { levelTitle } from '../db/store'
 import { ScreenHeader } from '../components/ui'
 import { useApp } from '../state/AppContext'
+import { CHAPTERS } from '../content/chapters'
 
 type Metric = 'xp' | 'streak_days' | 'best_exam' | 'chapters_done'
 const METRICS: { id: Metric; label: string; icon: string; fmt: (r: LeaderRow) => string }[] = [
   { id: 'xp', label: 'XP', icon: '⭐', fmt: (r) => `${r.xp}` },
   { id: 'streak_days', label: 'Streak', icon: '🔥', fmt: (r) => `${r.streak_days}d` },
   { id: 'best_exam', label: 'Klausur', icon: '🎓', fmt: (r) => `${r.best_exam}/68` },
-  { id: 'chapters_done', label: 'Kapitel', icon: '📜', fmt: (r) => `${r.chapters_done}/7` },
+  { id: 'chapters_done', label: 'Kapitel', icon: '📜', fmt: (r) => `${r.chapters_done}/${CHAPTERS.length}` },
 ]
 
 const MEDAL = ['🥇', '🥈', '🥉']

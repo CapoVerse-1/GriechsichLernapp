@@ -50,7 +50,7 @@ export const CHAPTERS: Chapter[] = [
     id: 'vokabular',
     num: 4,
     title: 'Vokabular',
-    subtitle: '≈130 Begriffe',
+    subtitle: '238 Begriffe',
     icon: 'λ',
     accent: 'coral',
     blurb: 'Das Kernstück: alle philosophischen Termini — frühgriechisch, platonisch und aristotelisch — griechisch ↔ deutsch.',

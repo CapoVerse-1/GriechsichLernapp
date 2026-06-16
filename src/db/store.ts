@@ -1,5 +1,6 @@
 import { getCurrentUserId } from './auth'
 import { assertOk, supabase } from './database'
+import { CHAPTERS } from '../content/chapters'
 
 export function levelForXp(xp: number): { level: number; into: number; need: number; pct: number } {
   let level = 1
@@ -17,6 +18,7 @@ export function levelForXp(xp: number): { level: number; into: number; need: num
 export const LEVEL_TITLES = [
   'Anfänger:in', 'Schüler:in', 'Lehrling', 'Kenner:in', 'Stoiker:in',
   'Peripatetiker:in', 'Dialektiker:in', 'Sophist:in', 'Philosoph:in', 'Sokrates-Niveau',
+  'Platoniker:in', 'Aristoteliker:in', 'Philolog:in', 'Meister:in', 'Olymp-Niveau',
 ]
 
 export function levelTitle(level: number): string {
@@ -292,7 +294,23 @@ export interface AchievementDef {
 export interface AchievementCtx {
   game: GameState
   chapters: Record<string, ChapterRow>
+  modes: ModeRow[]
   bestExam: number
+}
+
+const TOTAL_CHAPTERS = CHAPTERS.length
+const TOTAL_MODES = CHAPTERS.reduce((sum, chapter) => sum + chapter.modes.length, 0)
+const MODE_MASTERED_SCORE = 0.6
+
+function allChaptersDone(chapters: Record<string, ChapterRow>): boolean {
+  return CHAPTERS.every((chapter) => chapters[chapter.id]?.status === 'done')
+}
+
+function allModesMastered(modes: ModeRow[]): boolean {
+  const best = new Map(modes.map((row) => [`${row.chapter_id}:${row.mode_id}`, row.best_score]))
+  return CHAPTERS.every((chapter) =>
+    chapter.modes.every((mode) => (best.get(`${chapter.id}:${mode}`) ?? 0) >= MODE_MASTERED_SCORE),
+  )
 }
 
 export const ACHIEVEMENTS: AchievementDef[] = [
@@ -302,8 +320,10 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   { id: 'streak-3', title: 'Dranbleiben', desc: '3 Tage Streak', icon: '📅', check: (c) => c.game.streak_days >= 3 },
   { id: 'streak-7', title: 'Eine Woche!', desc: '7 Tage Streak', icon: '🗓️', check: (c) => c.game.streak_days >= 7 },
   { id: 'level-5', title: 'Dialektiker:in', desc: 'Erreiche Level 5', icon: '⭐', check: (c) => levelForXp(c.game.xp).level >= 5 },
+  { id: 'level-10', title: 'Sokrates-Niveau', desc: 'Erreiche Level 10', icon: '🌟', check: (c) => levelForXp(c.game.xp).level >= 10 },
   { id: 'chapter-1', title: 'Kapitel-Meister:in', desc: 'Schließe ein Kapitel ab', icon: '🏅', check: (c) => Object.values(c.chapters).some((r) => r.status === 'done') },
-  { id: 'all-chapters', title: 'Vollendung', desc: 'Alle 7 Kapitel abgeschlossen', icon: '👑', check: (c) => Object.values(c.chapters).filter((r) => r.status === 'done').length >= 7 },
+  { id: 'all-chapters', title: 'Vollendung', desc: `Alle ${TOTAL_CHAPTERS} Kapitel abgeschlossen`, icon: '👑', check: (c) => allChaptersDone(c.chapters) },
+  { id: 'all-modes', title: 'Alles gemeistert', desc: `Alle ${TOTAL_MODES} Übungen mit mindestens 60%`, icon: '🏛️', check: (c) => allModesMastered(c.modes) },
   { id: 'exam-pass', title: 'Bestanden', desc: 'Klausur mit ≥ 37 Punkten', icon: '🎓', check: (c) => c.bestExam >= 37 },
   { id: 'exam-ace', title: 'Sehr gut', desc: 'Klausur mit ≥ 61 Punkten', icon: '🏆', check: (c) => c.bestExam >= 61 },
 ]

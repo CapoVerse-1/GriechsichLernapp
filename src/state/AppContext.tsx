@@ -5,7 +5,7 @@ import {
 } from '../db/auth'
 import {
   addXp, completeChapter, getChapterProgress, getExams, getGame, levelForXp, levelTitle,
-  recordAnswer, recordExam, recordMode, saveCheckpoint, startChapter, syncAchievements,
+  getAllModeProgress, recordAnswer, recordExam, recordMode, saveCheckpoint, startChapter, syncAchievements,
   touchStreak, type AchievementDef, type ChapterRow, type GameState,
 } from '../db/store'
 
@@ -117,10 +117,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const runAchievements = useCallback(async () => {
     if (!hasSession()) return
-    const [nextGame, nextChapters, exams] = await Promise.all([getGame(), getChapterProgress(), getExams()])
+    const [nextGame, nextChapters, exams, modes] = await Promise.all([getGame(), getChapterProgress(), getExams(), getAllModeProgress()])
     const fresh = await syncAchievements({
       game: nextGame,
       chapters: nextChapters,
+      modes,
       bestExam: exams.reduce((m, e) => Math.max(m, e.points), 0),
     })
     if (fresh.length) setQueue((q) => [...q, ...fresh])

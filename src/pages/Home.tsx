@@ -82,7 +82,7 @@ export function Home({ onChapter, onExam, onStats, onLeaderboard }: { onChapter:
         <div className="mt-3 grid grid-cols-3 gap-2">
           <StatChip icon="🔥" value={app.game.streak_days} label="Tage Streak" tone="text-coral-500" />
           <StatChip icon="⭐" value={app.game.xp} label="XP gesamt" tone="text-sun-600" />
-          <StatChip icon="📜" value={`${doneCount}/7`} label="Kapitel" tone="text-teal-700" />
+          <StatChip icon="📜" value={`${doneCount}/${CHAPTERS.length}`} label="Kapitel" tone="text-teal-700" />
         </div>
       </div>
 
