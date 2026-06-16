@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { ProgressBar, accent } from './ui'
 
 export function ModeShell({
@@ -106,18 +106,21 @@ export function ResultScreen({
   extra?: ReactNode
 }) {
   const [saving, setSaving] = useState(false)
+  const mounted = useRef(true)
   const a = accent(accentKey)
   const great = scorePct >= 0.8
   const ok = scorePct >= 0.5
   const emoji = great ? '🏆' : ok ? '🌿' : '📚'
   const msg = great ? 'Hervorragend!' : ok ? 'Gut gemacht!' : 'Weiter üben!'
 
+  useEffect(() => () => { mounted.current = false }, [])
+
   const done = async () => {
     if (saving) return
     setSaving(true)
     try { await onDone() }
     catch (e) { console.error(e) }
-    finally { setSaving(false) }
+    finally { if (mounted.current) setSaving(false) }
   }
 
   return (

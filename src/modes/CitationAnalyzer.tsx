@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FeedbackBar, ModeShell, ResultScreen } from '../components/ModeShell'
 import { citationItems } from '../lib/select'
 import { sample, shuffle } from '../lib/text'
@@ -22,6 +22,7 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
   const [state, setState] = useState<'input' | 'correct' | 'wrong'>('input')
   const [correct, setCorrect] = useState(0)
   const [done, setDone] = useState(false)
+  const awardJobs = useRef<Promise<void>[]>([])
 
   const item = items[i]
   useEffect(() => {
@@ -37,8 +38,16 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
     return (
       <ResultScreen
         scorePct={correct / items.length} correct={correct} total={items.length} xp={correct * 12} accentKey={accentKey}
-        onRetry={() => { setI(0); setCorrect(0); setDone(false) }}
-        onDone={() => onFinish(correct / items.length)}
+        onRetry={() => {
+          awardJobs.current = []
+          setI(0)
+          setCorrect(0)
+          setDone(false)
+        }}
+        onDone={async () => {
+          await Promise.allSettled(awardJobs.current)
+          await onFinish(correct / items.length)
+        }}
       />
     )
   }
@@ -52,7 +61,7 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
   const assignLabel = (labelIdx: number) => {
     if (state !== 'input' || selTok === null) return
     setAssign((prev) => {
-      const next = [...prev]
+      const next = item.parts.map((_, k) => (typeof prev[k] === 'number' ? prev[k] : null))
       // remove this label from any other slot
       for (let k = 0; k < next.length; k++) if (next[k] === labelIdx) next[k] = null
       next[selTok] = labelIdx
@@ -62,10 +71,13 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
   }
 
   const check = () => {
-    const ok = assign.every((labelIdx, tokIdx) => labelIdx === tokIdx)
+    const ok = slots.every((labelIdx, tokIdx) => labelIdx === tokIdx)
     setState(ok ? 'correct' : 'wrong')
     if (ok) setCorrect((c) => c + 1)
-    app.award(ok, { itemId: item.id, xp: 12 })
+    const job = app.award(ok, { itemId: item.id, xp: 12 })
+    awardJobs.current.push(job.catch((e) => {
+      console.error(e)
+    }))
   }
   const next = () => {
     if (i + 1 >= items.length) setDone(true)
