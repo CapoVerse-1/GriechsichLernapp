@@ -678,6 +678,13 @@ export const MC_QUESTIONS: TaggedMC[] = [
     correct: [0, 1, 2, 3],
     explain: 'I und A können beide das erste Buch bezeichnen; die übrige Struktur bleibt gleich.',
   },
+  {
+    id: 'mc-cit-17', chapter: 'zitierweise',
+    q: 'Was zeigt „DK 11 A 10" in der Thales-Ölpressen-Anekdote?',
+    options: ['11 = Thales', 'A = Testimonium/Bericht', '10 = 10. Testimonium nach DK', 'B = Bekker-Spalte'],
+    correct: [0, 1, 2],
+    explain: 'DK 11 A 10 ist ein Diels-Kranz-Testimonium zu Thales. Bekker-Spalten gehören zu Aristoteles-Zitaten.',
+  },
 
   // ——— Deep-audit additions: Vokabular ———
   {
@@ -807,6 +814,18 @@ export const MC_QUESTIONS: TaggedMC[] = [
     correct: [0, 1, 2],
     explain: 'γίγνομαι ist ein Deponens mit Medium/Passiv-Form und aktiver Bedeutung „werden".',
   },
+  {
+    id: 'mc-gr-24', chapter: 'grammatik',
+    q: 'Welche Aussagen zu Xenophanes’ „ἀνέθηκαν" stimmen?',
+    options: [
+      'Es ist ein epischer Aorist im Indikativ.',
+      'Der Aorist gibt hier einen punktuellen Aspekt an.',
+      'Es wird meist mit einer Vergangenheitsform übersetzt.',
+      'Es ist ein Präsens ohne Augment.',
+    ],
+    correct: [0, 1, 2],
+    explain: 'Die Folien bestimmen ἀνέθηκαν als epischen Aorist im Indikativ: punktueller Aspekt, meist vergangen übersetzt.',
+  },
 
   // ——— Deep-audit additions: Fragmente ———
   {
@@ -853,27 +872,51 @@ export const MC_QUESTIONS: TaggedMC[] = [
   },
   {
     id: 'mc-fr-17', chapter: 'fragmente',
+    q: 'Welche Aussagen zum Anaximander-Testimonium stimmen?',
+    options: [
+      'Anaximander stammt aus Milet.',
+      'Er gilt als Nachfolger/Schüler des Thales.',
+      'Er bezeichnete das Prinzip als ἄπειρον / das Unendliche.',
+      'Er wird in DK mit der Nummer 31 geführt.',
+    ],
+    correct: [0, 1, 2],
+    explain: 'Die Folie nennt Anaximander aus Milet, Nachfolger und Schüler des Thales; DK 31 ist Empedokles, Anaximander ist DK 12.',
+  },
+  {
+    id: 'mc-fr-18', chapter: 'fragmente',
     q: 'Welche Analyse passt zu Phaidon 99e?',
     options: ['ἔδοξε = es schien', 'χρῆναι = notwendig sein', 'καταφυγόντα = hinfliehend', 'σκοπεῖν = auszuspähen/untersuchen'],
     correct: [0, 1, 2, 3],
     explain: 'Phaidon 99e beschreibt die Flucht zu den Logoi und das Ausspähen der Wahrheit der Seienden.',
   },
   {
-    id: 'mc-fr-18', chapter: 'fragmente',
+    id: 'mc-fr-19', chapter: 'fragmente',
+    q: 'Welche Beobachtungen helfen bei Phaidon 99e?',
+    options: [
+      'Der Satz beginnt mit dem Verb ἔδοξε.',
+      'Es steht kein Wort im Nominativ.',
+      'Das Subjekt wird im Deutschen als „es" ergänzt.',
+      'μοι ist ein Dativ und heißt „mir".',
+    ],
+    correct: [0, 1, 2, 3],
+    explain: 'Die Folien betonen: kein Nominativ, Anfang mit ἔδοξε; deshalb: „Es schien mir ...".',
+  },
+  {
+    id: 'mc-fr-20', chapter: 'fragmente',
     q: 'Welche Analyse passt zu Phaidon 100b?',
     options: ["καθ' αὑτό = gemäß sich selbst", 'καλόν = das Schöne', 'ἀγαθόν = das Gute', 'μέγα = das Große'],
     correct: [0, 1, 2, 3],
     explain: 'Phaidon 100b setzt das Schöne selbst, Gute, Große und alles andere voraus.',
   },
   {
-    id: 'mc-fr-19', chapter: 'fragmente',
+    id: 'mc-fr-21', chapter: 'fragmente',
     q: 'Welche Analyse passt zu Phaidon 100c?',
     options: ['φαίνεται = es scheint', 'πλήν = außer', 'διότι = weil', 'μετέχει = hat Anteil'],
     correct: [0, 1, 2, 3],
     explain: '100c erklärt Schönheit durch Teilhabe am Schönen selbst.',
   },
   {
-    id: 'mc-fr-20', chapter: 'fragmente',
+    id: 'mc-fr-22', chapter: 'fragmente',
     q: 'Welche Methode wird in den Fragmentfolien immer wieder genutzt?',
     options: ['verbales Prädikat suchen', 'Subjekt suchen', 'Objekte/Attribute bestimmen', 'Valenzformel bilden'],
     correct: [0, 1, 2, 3],

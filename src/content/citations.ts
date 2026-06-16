@@ -70,6 +70,18 @@ export const CITATIONS: CitationExample[] = [
     explain: 'DK 11 A 6 = Thales, Testimonium (A), Nr. 6. A = Bericht eines anderen Autors.',
   },
   {
+    id: 'c-dk11a10',
+    system: 'vorsokratiker',
+    cite: 'DK 11 A 10',
+    parts: [
+      { token: 'DK', label: 'Diels/Kranz', role: 'Ausgabe' },
+      { token: '11', label: 'Thales', role: 'Philosophen-Nr' },
+      { token: 'A', label: 'Testimonium (Bericht)', role: 'Textform' },
+      { token: '10', label: '10. Testimonium nach DK', role: 'Fragment-Nr' },
+    ],
+    explain: 'DK 11 A 10 = Thales, Testimonium Nr. 10. In den Folien ist das die Ölpressen-Anekdote bei Aristoteles.',
+  },
+  {
     id: 'c-dk21b23',
     system: 'vorsokratiker',
     cite: 'D-K 21 B 23',
