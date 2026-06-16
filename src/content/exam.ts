@@ -41,14 +41,14 @@ export interface ExamSectionSpec {
 }
 
 export const EXAM_BLUEPRINT: ExamSectionSpec[] = [
-  { id: 'q1', no: '1', kind: 'type-g2l', title: 'Transkribieren Sie folgende Wörter mit dem lateinischen Alphabet', points: 10, count: 5 },
-  { id: 'q1a', no: '1a', kind: 'type-l2g', title: 'Schreiben Sie folgende Ausdrücke mit griechischen Buchstaben', points: 10, count: 5 },
+  { id: 'q1', no: '1', kind: 'type-g2l', title: 'Transkribieren Sie folgende Wörter mit dem lateinischen Alphabet', points: 10, count: 10 },
+  { id: 'q1a', no: '1a', kind: 'type-l2g', title: 'Schreiben Sie folgende Ausdrücke mit griechischen Buchstaben', points: 10, count: 10 },
   { id: 'q2', no: '2', kind: 'mc', title: 'Wie werden die Fragmente der Vorsokratiker zitiert?', points: 4, count: 2, mcChapter: 'zitierweise' },
-  { id: 'q3', no: '3', kind: 'vocab', title: 'Übersetzen Sie folgende frühgriechische Termini ins Deutsche', points: 8, count: 4, group: 'vorsokratiker' },
+  { id: 'q3', no: '3', kind: 'vocab', title: 'Übersetzen Sie folgende frühgriechische Termini ins Deutsche', points: 8, count: 8, group: 'vorsokratiker' },
   { id: 'q4', no: '4', kind: 'mc', title: 'Worauf verweist ein Zitat wie „Plat., Apol. 23 a"?', points: 4, count: 2, mcChapter: 'zitierweise' },
-  { id: 'q5', no: '5', kind: 'vocab', title: 'Geben Sie deutsche Wörter für folgende platonische Begriffe an', points: 8, count: 4, group: 'platon' },
+  { id: 'q5', no: '5', kind: 'vocab', title: 'Geben Sie deutsche Wörter für folgende platonische Begriffe an', points: 8, count: 8, group: 'platon' },
   { id: 'q6', no: '6', kind: 'mc', title: 'Nach welcher Ausgabe wird Aristoteles zitiert?', points: 4, count: 2, mcChapter: 'zitierweise' },
-  { id: 'q7', no: '7', kind: 'vocab', title: 'Was können folgende aristotelische Ausdrücke bezeichnen?', points: 8, count: 4, group: 'aristoteles' },
+  { id: 'q7', no: '7', kind: 'vocab', title: 'Was können folgende aristotelische Ausdrücke bezeichnen?', points: 8, count: 8, group: 'aristoteles' },
   { id: 'q8', no: '8', kind: 'mc', title: 'Was besagt die grammatische Kategorie „Medium"?', points: 4, count: 2, mcChapter: 'grammatik' },
   { id: 'q9', no: '9', kind: 'compare', title: 'Erklären Sie den Unterschied der Formen εἶναι, ὄν, οὐσία', points: 4, count: 1 },
   { id: 'q10', no: '10', kind: 'fragment', title: 'Versuchen Sie, folgendes Fragment zu übersetzen', points: 4, count: 1 },

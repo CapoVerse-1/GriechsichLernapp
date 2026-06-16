@@ -70,6 +70,30 @@ export const CITATIONS: CitationExample[] = [
     explain: 'DK 11 A 6 = Thales, Testimonium (A), Nr. 6. A = Bericht eines anderen Autors.',
   },
   {
+    id: 'c-dk21b23',
+    system: 'vorsokratiker',
+    cite: 'D-K 21 B 23',
+    parts: [
+      { token: 'D-K', label: 'Diels/Kranz', role: 'Ausgabe' },
+      { token: '21', label: 'Xenophanes', role: 'Philosophen-Nr' },
+      { token: 'B', label: 'Fragment (Originalzitat)', role: 'Textform' },
+      { token: '23', label: '23. Fragment nach D-K', role: 'Fragment-Nr' },
+    ],
+    explain: 'D-K 21 B 23 = Xenophanes, Fragment Nr. 23.',
+  },
+  {
+    id: 'c-dk31b2',
+    system: 'vorsokratiker',
+    cite: 'DK 31 B 2',
+    parts: [
+      { token: 'DK', label: 'Diels/Kranz', role: 'Ausgabe' },
+      { token: '31', label: 'Empedokles', role: 'Philosophen-Nr' },
+      { token: 'B', label: 'Fragment', role: 'Textform' },
+      { token: '2', label: '2. Fragment nach DK', role: 'Fragment-Nr' },
+    ],
+    explain: 'DK 31 B 2 = Empedokles, Fragment Nr. 2.',
+  },
+  {
     id: 'c-dk59b11',
     system: 'vorsokratiker',
     cite: 'Fragment 59 B 11 D-K',
@@ -80,6 +104,18 @@ export const CITATIONS: CitationExample[] = [
       { token: 'D-K', label: 'Diels/Kranz', role: 'Ausgabe' },
     ],
     explain: 'Alternative Anordnung: Fragment 59 (Anaxagoras) B 11 D-K.',
+  },
+  {
+    id: 'c-dk21b23-alt',
+    system: 'vorsokratiker',
+    cite: 'Fragment 21 B 23 D-K',
+    parts: [
+      { token: '21', label: 'Xenophanes', role: 'Philosophen-Nr' },
+      { token: 'B', label: 'Fragment', role: 'Textform' },
+      { token: '23', label: '23. Fragment nach D-K', role: 'Fragment-Nr' },
+      { token: 'D-K', label: 'Diels/Kranz', role: 'Ausgabe' },
+    ],
+    explain: 'Alternative Reihenfolge: Fragment 21 B 23 D-K = Xenophanes, B-Fragment Nr. 23.',
   },
   {
     id: 'c-phaidros',
@@ -140,6 +176,19 @@ export const CITATIONS: CitationExample[] = [
     explain: 'Plat., Apol. 23 a = Apologie des Sokrates, Stephanus-Seite 23, Abschnitt a.',
   },
   {
+    id: 'c-timaios',
+    system: 'platon',
+    cite: 'Ti. 27d-28a',
+    parts: [
+      { token: 'Ti.', label: 'Werk: Timaios', role: 'Werktitel' },
+      { token: '27', label: 'Stephanus-Seite 27', role: 'Seite' },
+      { token: 'd', label: 'Abschnitt d', role: 'Abschnitt' },
+      { token: '28', label: 'Stephanus-Seite 28', role: 'Seite' },
+      { token: 'a', label: 'Abschnitt a', role: 'Abschnitt' },
+    ],
+    explain: 'Ti. 27d-28a verweist auf den Timaios, von Stephanus-Seite 27 Abschnitt d bis Seite 28 Abschnitt a.',
+  },
+  {
     id: 'c-phys',
     system: 'aristoteles',
     cite: 'Arist. Phys. A 1 184a10',
@@ -153,6 +202,20 @@ export const CITATIONS: CitationExample[] = [
       { token: '10', label: 'Bekker-Zeile', role: 'Zeile' },
     ],
     explain: 'Arist. Phys. A 1 184a10 = Aristoteles, Physik, 1. Buch, 1. Kapitel, Bekker-Seite 184, Spalte a, Zeile 10.',
+  },
+  {
+    id: 'c-phys-roman',
+    system: 'aristoteles',
+    cite: 'Phys. I 1 184a10',
+    parts: [
+      { token: 'Phys.', label: 'Werk: Physik', role: 'Werktitel' },
+      { token: 'I', label: '1. Buch', role: 'Buch' },
+      { token: '1', label: '1. Kapitel', role: 'Kapitel' },
+      { token: '184', label: 'Bekker-Seite', role: 'Seite' },
+      { token: 'a', label: 'Bekker-Spalte (links)', role: 'Spalte' },
+      { token: '10', label: 'Bekker-Zeile', role: 'Zeile' },
+    ],
+    explain: 'Phys. I 1 184a10 ist dieselbe Struktur wie Phys. A 1 184a10; I/A bezeichnet hier das 1. Buch.',
   },
   {
     id: 'c-en',
