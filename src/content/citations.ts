@@ -117,6 +117,18 @@ export const CITATIONS: CitationExample[] = [
     explain: 'Euthphr. 2b2-3 = Euthyphron, Seite 2, Abschnitt b, Zeilen 2–3.',
   },
   {
+    id: 'c-laches',
+    system: 'platon',
+    cite: 'La. 179 c1',
+    parts: [
+      { token: 'La.', label: 'Werk: Laches', role: 'Werktitel' },
+      { token: '179', label: 'Seite (Stephanus)', role: 'Seite' },
+      { token: 'c', label: 'Abschnitt (Stephanus)', role: 'Abschnitt' },
+      { token: '1', label: 'Zeile (Burnet)', role: 'Zeile' },
+    ],
+    explain: 'La. 179 c1 = Laches, Stephanus-Seite 179, Abschnitt c, Burnet-Zeile 1.',
+  },
+  {
     id: 'c-apol',
     system: 'platon',
     cite: 'Plat., Apol. 23 a',
@@ -126,6 +138,21 @@ export const CITATIONS: CitationExample[] = [
       { token: 'a', label: 'Abschnitt (Stephanus)', role: 'Abschnitt' },
     ],
     explain: 'Plat., Apol. 23 a = Apologie des Sokrates, Stephanus-Seite 23, Abschnitt a.',
+  },
+  {
+    id: 'c-phys',
+    system: 'aristoteles',
+    cite: 'Arist. Phys. A 1 184a10',
+    parts: [
+      { token: 'Arist.', label: 'Autor: Aristoteles', role: 'Autor' },
+      { token: 'Phys.', label: 'Werk: Physik', role: 'Werktitel' },
+      { token: 'A', label: '1. Buch', role: 'Buch' },
+      { token: '1', label: '1. Kapitel', role: 'Kapitel' },
+      { token: '184', label: 'Bekker-Seite', role: 'Seite' },
+      { token: 'a', label: 'Bekker-Spalte (links)', role: 'Spalte' },
+      { token: '10', label: 'Bekker-Zeile', role: 'Zeile' },
+    ],
+    explain: 'Arist. Phys. A 1 184a10 = Aristoteles, Physik, 1. Buch, 1. Kapitel, Bekker-Seite 184, Spalte a, Zeile 10.',
   },
   {
     id: 'c-en',

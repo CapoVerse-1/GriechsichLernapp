@@ -88,7 +88,7 @@ export const CHAPTERS: Chapter[] = [
     icon: '☘',
     accent: 'sun',
     blurb: 'Heraklit, Xenophanes, Anaximander, Parmenides und Platon — die durchübersetzten Stellen Wort für Wort.',
-    modes: ['builder', 'flashcards', 'citation'],
+    modes: ['builder', 'flashcards', 'citation', 'mc'],
     units: ['Einheit 4–10'],
   },
 ]

@@ -96,6 +96,21 @@ export const TRANS_WORDS: TransWord[] = [
   { gr: 'ἐγκράτεια', tr: 'enkráteia', de: 'Selbstbeherrschung' },
   { gr: 'τυγχάνω', tr: 'tynchánō', de: 'treffen' },
   { gr: 'στάσις', tr: 'stásis', de: 'Stand, Bürgerkrieg' },
+  // Handout examples and Muster words that exercise the special transcription rules.
+  { gr: 'ἁμαρτία', tr: 'hamartía', de: 'Fehler, Verfehlung' },
+  { gr: 'Ἑλλάς', tr: 'Hellás', de: 'Griechenland' },
+  { gr: 'αἵρεσις', tr: 'haíresis', de: 'Wahl, Richtung, Schule' },
+  { gr: 'εὐδαιμονία', tr: 'eudaimonía', de: 'Glückseligkeit' },
+  { gr: 'ἀγγέλλω', tr: 'angélō', de: 'melden, verkünden' },
+  { gr: 'ὄν', tr: 'ón', de: 'seiend, das Seiende' },
+  { gr: 'νόημα', tr: 'nóēma', de: 'Gedanke' },
+  { gr: 'νοούμενα', tr: 'noúmena', de: 'das Gedachte' },
+  { gr: 'πεῖραρ', tr: 'peîrar', de: 'Grenze' },
+  { gr: 'τίσις', tr: 'tísis', de: 'Buße, Strafe' },
+  { gr: 'τάξις', tr: 'táxis', de: 'Ordnung' },
+  { gr: 'ἀδικία', tr: 'adikía', de: 'Unrecht' },
+  { gr: 'ἄλλος', tr: 'állos', de: 'anderer' },
+  { gr: 'καλός', tr: 'kalós', de: 'schön, gut' },
 ]
 
 // Build typing items (both directions) from the bank.
