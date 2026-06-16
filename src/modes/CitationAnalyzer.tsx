@@ -4,6 +4,7 @@ import { FeedbackBar, ModeShell, ResultScreen } from '../components/ModeShell'
 import { citationItems } from '../lib/select'
 import { sample, shuffle } from '../lib/text'
 import { useApp } from '../state/AppContext'
+import type { CitationExample } from '../content/types'
 import type { ModeProps } from './types'
 
 const SYS_LABEL: Record<string, string> = {
@@ -25,12 +26,17 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
   const awardJobs = useRef<Promise<void>[]>([])
 
   const item = items[i]
+
+  const resetRound = (roundItem: CitationExample) => {
+    setAssign(new Array(roundItem.parts.length).fill(null))
+    setSelTok(null)
+    setLabelOrder(shuffle(roundItem.parts.map((_, k) => k)))
+    setState('input')
+  }
+
   useEffect(() => {
     if (!item) return
-    setAssign(new Array(item.parts.length).fill(null))
-    setSelTok(null)
-    setLabelOrder(shuffle(item.parts.map((_, k) => k)))
-    setState('input')
+    resetRound(item)
   }, [item])
 
   if (!items.length) return <div className="grid min-h-screen place-items-center p-8 text-ink-faint">Keine Zitate.</div>
@@ -53,15 +59,21 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
   }
 
   // `assign` is empty for one render before the effect populates it; normalise
-  // it to the current item's length so indexing is always safe.
-  const slots: (number | null)[] = item.parts.map((_, k) => (typeof assign[k] === 'number' ? assign[k] : null))
+  // it to the current item's length so indexing is always safe. The bounds check
+  // also protects the transition from a longer citation to a shorter one.
+  const isCurrentPartIndex = (idx: unknown): idx is number =>
+    Number.isInteger(idx) && (idx as number) >= 0 && (idx as number) < item.parts.length
+  const slots: (number | null)[] = item.parts.map((_, k) => (isCurrentPartIndex(assign[k]) ? assign[k] : null))
+  const currentLabelOrder = labelOrder.length === item.parts.length && labelOrder.every(isCurrentPartIndex)
+    ? labelOrder
+    : item.parts.map((_, k) => k)
   const usedLabels = new Set(slots.filter((x): x is number => x !== null))
   const allAssigned = slots.every((x) => x !== null)
 
   const assignLabel = (labelIdx: number) => {
     if (state !== 'input' || selTok === null) return
     setAssign((prev) => {
-      const next = item.parts.map((_, k) => (typeof prev[k] === 'number' ? prev[k] : null))
+      const next = item.parts.map((_, k) => (isCurrentPartIndex(prev[k]) ? prev[k] : null))
       // remove this label from any other slot
       for (let k = 0; k < next.length; k++) if (next[k] === labelIdx) next[k] = null
       next[selTok] = labelIdx
@@ -81,7 +93,11 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
   }
   const next = () => {
     if (i + 1 >= items.length) setDone(true)
-    else setI(i + 1)
+    else {
+      const nextIndex = i + 1
+      resetRound(items[nextIndex])
+      setI(nextIndex)
+    }
   }
 
   return (
@@ -119,7 +135,7 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
         {/* Label bank */}
         <p className="mb-2 mt-6 text-xs font-bold uppercase tracking-widest text-ink-faint">Bedeutungen</p>
         <div className="flex flex-wrap gap-2">
-          {labelOrder.map((k) => {
+          {currentLabelOrder.map((k) => {
             const used = usedLabels.has(k)
             return (
               <motion.button
