@@ -103,10 +103,10 @@ The Hannah-only message was visually inspected with a **locally accelerated time
 - [x] Prepare local working captures of all seven chapter overviews and all seven complete reading pages at 390 px. These remain internal until the first design-review set is approved.
 - [x] Prepare local working captures of every distinct exercise mode in its initial state, plus flipped flashcards, revealed self-test answers, selected choices, the active Blitz round, and the exam typing screen at 390 and 320 px. Fred's XP remained unchanged during capture.
 - [x] User reviewed the initial screenshots and explicitly requested the production push on 24 September 2026.
-- [ ] Assemble and deliver the complete screenshot set after design approval.
+- [x] Assemble the complete screenshot set after design approval in `../ui-previews/full-review/GALLERY.md`.
 - [x] Production push was explicitly authorized before deployment.
 
-Representative local screenshots are stored outside the app repository in `../ui-previews/` during review so generated images do not become production assets. Preparatory full-page and mode captures are in `../ui-previews/full-review/`. The exam's later question types and results, exercise feedback/results, and the achievement toast still need final captures for the complete review set.
+Representative local screenshots are stored outside the app repository in `../ui-previews/` so generated images do not become production assets. The complete gallery is in `../ui-previews/full-review/`. Later exam question types and results, exercise feedback/results, the achievement toast, and loading were captured using temporary local preview states that were removed after capture. No answer or exam result was submitted to the database during this review.
 
 ### Full screenshot set after design approval
 
@@ -118,4 +118,4 @@ Capture at 390 × 844, with narrow-width evidence where a screen has different b
 4. Blitz ready and active states; the exam typing, multiple-choice, self-assessment, and result states.
 5. Hannah's message dialog and the achievement toast; loading and connection error states using local simulation.
 
-The first design-review images are `01-login.png` through `07-reference.png` in the local preview folder. Mode-specific QA captures use the `review-` prefix. The complete set is a separate review deliverable after the user approves the visual direction.
+The first design-review images are `01-login.png` through `07-reference.png` in the local preview folder. Mode-specific QA captures use the `review-` prefix. The complete set covers every main screen and distinct exercise mode, all seven chapter overviews and reading pages, key answer and result states, all leaderboard tabs, Hannah's message, the achievement toast, loading, and connection error. Open `../ui-previews/full-review/GALLERY.md` for the index.
