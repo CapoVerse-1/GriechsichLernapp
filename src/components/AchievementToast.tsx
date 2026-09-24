@@ -22,11 +22,11 @@ export function AchievementToast() {
           onClick={dismissToast}
           className="safe-top fixed inset-x-0 top-0 z-50 mx-auto flex max-w-[440px] items-center gap-3 px-4 pt-2"
         >
-          <div className="flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-sun-500 to-coral-500 px-4 py-3 text-white shadow-float">
+          <div className="flex w-full items-center gap-3 rounded-2xl border border-teal-700 bg-teal-800 px-4 py-3 text-white shadow-float">
             <span className="text-3xl">{toast.icon}</span>
             <div className="min-w-0">
-              <p className="text-xs font-bold uppercase tracking-wider text-white/80">Erfolg freigeschaltet!</p>
-              <p className="truncate font-extrabold">{toast.title}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/70">Erfolg freigeschaltet</p>
+              <p className="truncate font-semibold">{toast.title}</p>
               <p className="truncate text-sm text-white/90">{toast.desc}</p>
             </div>
           </div>

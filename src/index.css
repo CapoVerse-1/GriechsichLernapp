@@ -11,9 +11,7 @@
   }
   body {
     margin: 0;
-    background:
-      radial-gradient(1200px 600px at 50% -10%, #e9f5f2 0%, transparent 60%),
-      linear-gradient(180deg, #fbf7ee 0%, #f5efe2 100%);
+    background: #f8f7f2;
     background-attachment: fixed;
     color: theme('colors.ink.DEFAULT');
     -webkit-font-smoothing: antialiased;
@@ -22,6 +20,10 @@
   }
   * { -webkit-tap-highlight-color: transparent; }
   button { font: inherit; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 3px solid #64a48c;
+    outline-offset: 3px;
+  }
 }
 
 @layer utilities {
@@ -32,9 +34,19 @@
   .greek { font-family: theme('fontFamily.greek'); }
   .tap { @apply active:scale-[0.97] transition-transform; }
   .glass {
-    background: rgba(255,255,255,0.72);
+    background: rgba(248,247,242,0.94);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+.shadow-card { border: 1px solid #e5e9e1; }
+.app-shell { background: #f8f7f2; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

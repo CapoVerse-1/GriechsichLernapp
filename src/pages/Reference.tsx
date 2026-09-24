@@ -9,15 +9,15 @@ import type { Group } from '../content/types'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mb-6">
-      <h3 className="mb-2 px-1 text-sm font-black uppercase tracking-wide text-teal-700">{title}</h3>
+    <section className="mb-8">
+      <h3 className="mb-3 border-b border-ink/10 px-1 pb-2 font-serif text-lg font-bold text-ink">{title}</h3>
       <div className="space-y-3">{children}</div>
     </section>
   )
 }
 
 function InfoCard({ children }: { children: React.ReactNode }) {
-  return <div className="rounded-2xl bg-white p-4 text-sm leading-relaxed text-ink-soft shadow-card">{children}</div>
+  return <div className="rounded-2xl bg-white p-4 text-sm leading-[1.7] text-ink-soft shadow-card">{children}</div>
 }
 
 const GROUP_LABEL: Record<Group, string> = {
@@ -38,11 +38,11 @@ export function Reference({ chapterId, onBack }: { chapterId: string; onBack: ()
             <Section title="Das Alphabet · 24 Buchstaben">
               <div className="overflow-hidden rounded-2xl bg-white shadow-card">
                 {ALPHABET.map((l, idx) => (
-                  <div key={l.name} className={`flex items-center gap-3 px-4 py-2 ${idx % 2 ? 'bg-parchment/40' : ''}`}>
-                    <span className="greek w-16 text-2xl font-bold">{l.upper} {l.lower}</span>
-                    <span className="w-24 text-sm font-semibold text-ink">{l.name}</span>
+                  <div key={l.name} className={`grid grid-cols-[4rem_1fr_3rem] items-baseline gap-x-3 border-b border-ink/5 px-4 py-2.5 last:border-b-0 ${idx % 2 ? 'bg-parchment/40' : ''}`}>
+                    <span className="greek text-2xl font-bold">{l.upper} {l.lower}</span>
+                    <span className="text-sm font-semibold text-ink">{l.name}</span>
                     <span className="font-mono text-teal-700">{l.translit}</span>
-                    {l.note && <span className="ml-auto text-right text-[11px] text-ink-faint">{l.note}</span>}
+                    {l.note && <span className="col-span-2 col-start-2 text-[11px] leading-snug text-ink-faint">{l.note}</span>}
                   </div>
                 ))}
               </div>
@@ -130,7 +130,7 @@ export function Reference({ chapterId, onBack }: { chapterId: string; onBack: ()
 
         {chapterId === 'grammatik' && (
           GRAMMAR.map((t) => (
-            <Section key={t.id} title={`${t.icon} ${t.title}`}>
+            <Section key={t.id} title={t.title}>
               {t.body.map((b, idx) => (
                 <InfoCard key={idx}><b className="text-ink">{b.h}</b><br />{b.t}</InfoCard>
               ))}

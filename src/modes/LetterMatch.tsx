@@ -99,7 +99,7 @@ export default function LetterMatch({ chapterId, accentKey, onClose, onFinish }:
               <motion.button
                 key={t.key} layout initial={{ opacity: 0, x: -20 }} animate={{ opacity: gonePairs.has(t.pairId) ? 0 : 1, x: 0 }}
                 onClick={() => pick('a', t.key)}
-                className={`flex min-h-[64px] items-center justify-center rounded-2xl border-2 p-3 text-center font-bold transition-all ${tileCls(t, selL === t.key)} ${t.lang === 'gr' ? 'greek text-3xl' : 'text-base'}`}
+                className={`flex min-h-[64px] items-center justify-center rounded-2xl border p-3 text-center font-semibold transition-all ${tileCls(t, selL === t.key)} ${t.lang === 'gr' ? 'greek text-3xl' : 'text-base'}`}
               >
                 {t.text}
               </motion.button>
@@ -112,7 +112,7 @@ export default function LetterMatch({ chapterId, accentKey, onClose, onFinish }:
               <motion.button
                 key={t.key} layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: gonePairs.has(t.pairId) ? 0 : 1, x: 0 }}
                 onClick={() => pick('b', t.key)}
-                className={`flex min-h-[64px] items-center justify-center rounded-2xl border-2 p-3 text-center font-semibold transition-all ${tileCls(t, selR === t.key)} ${t.lang === 'gr' ? 'greek text-3xl' : 'text-base'}`}
+                className={`flex min-h-[64px] items-center justify-center rounded-2xl border p-3 text-center font-semibold transition-all ${tileCls(t, selR === t.key)} ${t.lang === 'gr' ? 'greek text-3xl' : 'text-base'}`}
               >
                 {t.text}
               </motion.button>

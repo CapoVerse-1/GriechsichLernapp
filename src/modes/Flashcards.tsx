@@ -45,6 +45,7 @@ export default function Flashcards({ chapterId, accentKey, onClose, onFinish }: 
             <motion.button
               key={card.id}
               onClick={() => setFlipped((f) => !f)}
+              aria-label={flipped ? `Rückseite: ${card.back}. Zum Umdrehen tippen` : `Vorderseite: ${card.front}. Zum Umdrehen tippen`}
               initial={{ opacity: 0, y: 24, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -24, scale: 0.96 }}
@@ -68,7 +69,7 @@ export default function Flashcards({ chapterId, accentKey, onClose, onFinish }: 
                 </div>
                 {/* Back */}
                 <div
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-3xl bg-gradient-to-br from-teal-600 to-teal-800 p-6 text-white shadow-card"
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-3xl bg-teal-800 p-6 text-white shadow-card"
                   style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                 >
                   <span className="text-xs font-bold uppercase tracking-widest text-white/60">Rückseite</span>
@@ -80,10 +81,10 @@ export default function Flashcards({ chapterId, accentKey, onClose, onFinish }: 
         </div>
 
         <div className="grid grid-cols-2 gap-3 pb-4 pt-2">
-          <button onClick={() => advance(false)} className="rounded-2xl border-2 border-ink/10 bg-white py-4 font-bold text-ink/60 tap">
+          <button onClick={() => advance(false)} className="rounded-2xl border border-ink/15 bg-white py-4 font-semibold text-ink-soft tap">
             ↻ Nochmal üben
           </button>
-          <button onClick={() => advance(true)} className="rounded-2xl bg-teal-600 py-4 font-bold text-white tap shadow-float">
+          <button onClick={() => advance(true)} className="rounded-2xl bg-teal-700 py-4 font-semibold text-white tap">
             ✓ Gewusst
           </button>
         </div>

@@ -1,9 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { AchievementToast } from './components/AchievementToast'
 import { ModeRouter } from './components/ModeRouter'
 import { getChapter, MODES } from './content/chapters'
-import { accent } from './components/ui'
 import MockExam from './modes/MockExam'
 import { ChapterView } from './pages/ChapterView'
 import { Home } from './pages/Home'
@@ -25,26 +24,29 @@ type View =
 
 function Loader() {
   return (
-    <div className="grid min-h-screen place-items-center">
-      <motion.div animate={{ scale: [1, 1.15, 1], rotate: [0, 6, -6, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-center">
-        <div className="font-serif text-6xl font-black text-teal-700">Σ</div>
-        <p className="mt-2 text-sm font-semibold text-ink-faint">Graecia wird geladen…</p>
-      </motion.div>
+    <div role="status" aria-live="polite" className="app-shell grid min-h-screen place-items-center px-5">
+      <div className="text-center">
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-teal-800 font-serif text-4xl font-bold text-white">Σ</div>
+        <p className="mt-5 font-serif text-xl font-bold text-ink">Graecia</p>
+        <p className="mt-1 text-sm text-ink-faint">Lernstand wird geladen …</p>
+      </div>
     </div>
   )
 }
 
 function SetupError({ message }: { message: string }) {
+  const missingConfig = message.includes('VITE_SUPABASE')
   return (
     <div className="grid min-h-screen place-items-center px-5">
       <div className="max-w-md rounded-3xl bg-white p-6 text-center shadow-card">
-        <div className="font-serif text-5xl font-black text-coral-500">Σ</div>
-        <h1 className="mt-3 text-xl font-black text-ink">Supabase fehlt</h1>
-        <p className="mt-2 text-sm text-ink-faint">{message}</p>
-        <p className="mt-4 rounded-2xl bg-parchment px-4 py-3 text-left font-mono text-xs text-ink/70">
-          VITE_SUPABASE_URL<br />
-          VITE_SUPABASE_ANON_KEY
-        </p>
+        <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-coral-50 font-serif text-3xl font-bold text-coral-600">Σ</div>
+        <h1 className="mt-4 font-serif text-xl font-bold text-ink">{missingConfig ? 'Einrichtung unvollständig' : 'Verbindung unterbrochen'}</h1>
+        <p className="mt-2 text-sm leading-relaxed text-ink-faint">{missingConfig ? 'Die App benötigt ihre Datenbank-Konfiguration.' : 'Dein Lernstand konnte gerade nicht geladen werden. Bitte versuche es erneut.'}</p>
+        <button onClick={() => window.location.reload()} className="mt-5 w-full rounded-2xl bg-teal-700 px-5 py-3.5 font-semibold text-white tap">Erneut versuchen</button>
+        <details className="mt-4 text-left text-xs text-ink-faint">
+          <summary className="cursor-pointer text-center">Fehlerdetails</summary>
+          <p className="mt-2 break-words rounded-xl bg-parchment p-3 font-mono">{message}</p>
+        </details>
       </div>
     </div>
   )
@@ -57,6 +59,7 @@ export default function App() {
   // Whenever the active profile changes (login / switch), start at Home.
   const userId = app.user?.id ?? null
   useEffect(() => { setView({ v: 'home' }) }, [userId])
+  useLayoutEffect(() => { window.scrollTo(0, 0) }, [view])
 
   if (!app.ready) return <Loader />
   if (app.error) return <SetupError message={app.error} />
@@ -72,8 +75,6 @@ export default function App() {
   // Mode + exam render full-screen (no app-shell padding rules conflict)
   if (view.v === 'mode') {
     const ch = getChapter(view.chapterId)!
-    const acc = accent(MODES[view.mode].accent).text // unused but keeps intent
-    void acc
     return (
       <div className="app-shell">
         <AchievementToast />

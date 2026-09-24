@@ -33,38 +33,38 @@ export function Stats({ onBack, onLeaderboard }: { onBack: () => void; onLeaderb
     <div className="app-shell pb-24">
       <ScreenHeader
         title={app.user?.name ?? 'Profil'} subtitle={`${app.levelTitle} · Level ${app.level}`} onBack={onBack}
-        right={<button onClick={app.logout} className="rounded-full bg-white px-3 py-2 text-xs font-bold text-ink/60 shadow-card tap">Profil wechseln</button>}
+        right={<button onClick={app.logout} className="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-ink-soft shadow-card tap">Profil wechseln</button>}
       />
 
       <div className="px-4 pt-2">
-        <div className="rounded-3xl bg-gradient-to-br from-teal-600 to-teal-800 p-5 text-white shadow-float">
+        <div className="rounded-3xl bg-teal-800 p-5 text-white shadow-float">
           <div className="flex items-center justify-between">
-            <div><p className="text-xs uppercase tracking-wider text-white/70">Level {app.level}</p><p className="text-2xl font-black">{app.levelTitle}</p></div>
-            <div className="grid h-16 w-16 place-items-center rounded-2xl bg-white/15 text-3xl font-black">{app.level}</div>
+            <div><p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">Dein Fortschritt</p><p className="mt-1 font-serif text-2xl font-bold">{app.levelTitle}</p></div>
+            <div aria-label={`Level ${app.level}`} className="grid h-12 w-12 place-items-center rounded-xl border border-white/25 bg-white/10 text-xl font-bold">{app.level}</div>
           </div>
           <ProgressBar pct={app.levelPct} accentKey="sun" className="mt-3" />
           <p className="mt-1 text-right text-[11px] text-white/70">{app.levelInto} / {app.levelNeed} XP bis Level {app.level + 1}</p>
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-white p-4 shadow-card"><p className="text-3xl font-black text-coral-500">🔥 {app.game.streak_days}</p><p className="text-xs text-ink-faint">Tage in Folge</p></div>
-          <div className="rounded-2xl bg-white p-4 shadow-card"><p className="text-3xl font-black text-sun-600">⭐ {app.game.xp}</p><p className="text-xs text-ink-faint">XP gesamt</p></div>
-          <div className="rounded-2xl bg-white p-4 shadow-card"><p className="text-3xl font-black text-teal-700">{acc}%</p><p className="text-xs text-ink-faint">Trefferquote</p></div>
-          <div className="rounded-2xl bg-white p-4 shadow-card"><p className="text-3xl font-black text-ink">{app.game.total_correct}</p><p className="text-xs text-ink-faint">richtige Antworten</p></div>
+          <div className="rounded-2xl bg-white p-4 shadow-card"><p className="text-3xl font-semibold tabular-nums text-ink">{app.game.streak_days}</p><p className="mt-1 text-xs text-ink-faint">Tage in Folge</p></div>
+          <div className="rounded-2xl bg-white p-4 shadow-card"><p className="text-3xl font-semibold tabular-nums text-ink">{app.game.xp}</p><p className="mt-1 text-xs text-ink-faint">XP gesamt</p></div>
+          <div className="rounded-2xl bg-white p-4 shadow-card"><p className="text-3xl font-semibold tabular-nums text-ink">{acc}%</p><p className="mt-1 text-xs text-ink-faint">Trefferquote</p></div>
+          <div className="rounded-2xl bg-white p-4 shadow-card"><p className="text-3xl font-semibold tabular-nums text-ink">{app.game.total_correct}</p><p className="mt-1 text-xs text-ink-faint">richtige Antworten</p></div>
         </div>
       </div>
 
       <div className="px-4 pt-6">
-        <h2 className="mb-3 px-1 text-sm font-black uppercase tracking-wide text-ink-faint">Erfolge · {unlocked.size}/{ACHIEVEMENTS.length}</h2>
+        <div className="mb-3 flex items-baseline justify-between px-1"><h2 className="font-serif text-xl font-bold text-ink">Erfolge</h2><span className="text-xs text-ink-faint">{unlocked.size}/{ACHIEVEMENTS.length} freigeschaltet</span></div>
         <div className="grid grid-cols-2 gap-3">
           {ACHIEVEMENTS.map((a) => {
             const on = unlocked.has(a.id)
             return (
               <div key={a.id} className={`rounded-2xl p-4 shadow-card transition ${on ? 'bg-white' : 'bg-white/50'}`}>
-                <div className={`text-3xl ${on ? '' : 'opacity-30 grayscale'}`}>{a.icon}</div>
-                <p className={`mt-1 font-extrabold leading-tight ${on ? 'text-ink' : 'text-ink-faint'}`}>{a.title}</p>
+                <div className={`text-2xl ${on ? '' : 'opacity-30 grayscale'}`}>{a.icon}</div>
+                <p className={`mt-2 font-semibold leading-tight ${on ? 'text-ink' : 'text-ink-faint'}`}>{a.title}</p>
                 <p className="text-[11px] leading-tight text-ink-faint">{a.desc}</p>
-                {on && <p className="mt-1 text-[10px] font-black uppercase text-teal-700">freigeschaltet</p>}
+                {on && <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.1em] text-teal-700">freigeschaltet</p>}
               </div>
             )
           })}
@@ -73,7 +73,7 @@ export function Stats({ onBack, onLeaderboard }: { onBack: () => void; onLeaderb
 
       {exams.length > 0 && (
         <div className="px-4 pt-6">
-          <h2 className="mb-3 px-1 text-sm font-black uppercase tracking-wide text-ink-faint">Klausur-Verlauf</h2>
+          <h2 className="mb-3 px-1 font-serif text-xl font-bold text-ink">Klausur-Verlauf</h2>
           <div className="overflow-hidden rounded-2xl bg-white shadow-card">
             {exams.map((e, idx) => {
               const band = gradeFor(e.points)
@@ -90,11 +90,11 @@ export function Stats({ onBack, onLeaderboard }: { onBack: () => void; onLeaderb
       )}
 
       <div className="px-4 pt-6">
-        <Button onClick={onLeaderboard} accentKey="sun" className="w-full">🏆 Zur Bestenliste</Button>
+        <Button onClick={onLeaderboard} className="w-full">Zur Bestenliste →</Button>
       </div>
 
       <div className="px-4 pt-4">
-        <button onClick={reset} className="w-full rounded-2xl border-2 border-coral-200 bg-orange-50 py-3 text-sm font-bold text-coral-600 tap">Fortschritt zurücksetzen</button>
+        <button onClick={reset} className="w-full rounded-2xl border border-coral-200 bg-white py-3 text-sm font-semibold text-coral-600 tap">Fortschritt zurücksetzen</button>
       </div>
     </div>
   )

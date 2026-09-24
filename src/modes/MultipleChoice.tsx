@@ -67,11 +67,11 @@ export default function MultipleChoice({ chapterId, accentKey, onClose, onFinish
     <ModeShell step={i} total={questions.length} accentKey={accentKey} onClose={onClose}>
       <div className="flex flex-1 flex-col pb-40">
         <div className="flex items-center gap-2 py-3">
-          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-sun-600">
+          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-sun-600">
             {multi ? 'Mehrere Antworten möglich' : 'Eine Antwort'}
           </span>
         </div>
-        <h2 className="mb-5 text-xl font-extrabold leading-snug">{q.q}</h2>
+        <h2 className="mb-5 font-serif text-2xl font-bold leading-snug">{q.q}</h2>
         <div className="flex flex-col gap-3">
           {q.order.map((idx) => {
             const opt = q.options[idx]
@@ -86,9 +86,9 @@ export default function MultipleChoice({ chapterId, accentKey, onClose, onFinish
             return (
               <motion.button
                 key={idx} whileTap={{ scale: checked ? 1 : 0.98 }} onClick={() => toggle(idx)}
-                className={`flex items-center gap-3 rounded-2xl border-2 p-4 text-left font-medium transition ${cls}`}
+                className={`flex min-h-14 items-center gap-3 rounded-2xl border p-4 text-left font-medium transition ${cls}`}
               >
-                <span className={`grid h-6 w-6 shrink-0 place-items-center ${multi ? 'rounded-md' : 'rounded-full'} border-2 text-xs font-bold ${sel ? 'border-teal-500 bg-teal-500 text-white' : 'border-ink/20 text-transparent'}`}>
+                <span className={`grid h-6 w-6 shrink-0 place-items-center ${multi ? 'rounded-md' : 'rounded-full'} border text-xs font-bold ${sel ? 'border-teal-500 bg-teal-500 text-white' : 'border-ink/20 text-transparent'}`}>
                   {checked ? (isAns ? '✓' : sel ? '✕' : '') : sel ? (multi ? '✓' : '●') : ''}
                 </span>
                 <span className="flex-1">{opt}</span>
@@ -104,9 +104,9 @@ export default function MultipleChoice({ chapterId, accentKey, onClose, onFinish
       </div>
 
       {!checked ? (
-        <div className="safe-bottom fixed inset-x-0 bottom-0 z-20 px-4 pt-3">
+        <div className="safe-bottom fixed bottom-0 left-1/2 z-20 w-full max-w-[460px] -translate-x-1/2 border-t border-ink/10 bg-parchment px-4 pt-3">
           <div className="mx-auto max-w-[460px]">
-            <button onClick={check} disabled={picked.size === 0} className="w-full rounded-2xl bg-ink py-4 font-bold text-white tap shadow-float disabled:opacity-30">
+            <button onClick={check} disabled={picked.size === 0} className="w-full rounded-2xl bg-ink py-4 font-semibold text-white tap disabled:opacity-30">
               Prüfen
             </button>
           </div>

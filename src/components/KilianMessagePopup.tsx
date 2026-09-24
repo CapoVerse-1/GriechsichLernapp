@@ -82,15 +82,16 @@ export function KilianMessagePopup() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-            className="w-full max-w-sm rounded-3xl bg-parchment p-6 text-center shadow-float"
+            className="w-full max-w-sm rounded-3xl border border-white/70 bg-parchment p-6 text-center shadow-float"
           >
-            <h2 id="kilian-message-heading" className="font-serif text-2xl font-black text-ink">{KILIAN_MESSAGE_HEADING}</h2>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Persönliche Nachricht</p>
+            <h2 id="kilian-message-heading" className="font-serif text-2xl font-bold text-ink">{KILIAN_MESSAGE_HEADING}</h2>
             <p id="kilian-message-body" className="mt-3 text-base leading-relaxed text-ink-soft">{message.text}</p>
             <button
               ref={closeButton}
               type="button"
               onClick={dismiss}
-              className="mt-6 w-full rounded-2xl bg-teal-600 px-5 py-3.5 font-bold text-white shadow-float tap"
+              className="mt-6 w-full rounded-2xl bg-teal-700 px-5 py-3.5 font-semibold text-white tap"
             >
               {message.reply}
             </button>

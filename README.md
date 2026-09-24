@@ -2,6 +2,8 @@
 
 Mobile-first Lern-App fuer die Philosophie-Pruefung "Griechische Terminologie" mit geteilten Profilen, Fortschritt, XP, Achievements, Klausur-Verlauf und Bestenliste.
 
+Die laufenden UI-Entscheidungen und der Review-Status stehen in [UI_DESIGN.md](UI_DESIGN.md).
+
 ## Stack
 
 - React 18 + TypeScript + Vite

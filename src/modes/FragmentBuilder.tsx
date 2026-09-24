@@ -48,7 +48,7 @@ export default function FragmentBuilder({ chapterId, accentKey, onClose, onFinis
     <ModeShell step={i} total={frags.length} accentKey={accentKey} onClose={onClose}>
       <div className="flex flex-1 flex-col pb-40">
         <div className="py-3">
-          <span className="rounded-full bg-olive-100 px-3 py-1 text-xs font-bold text-olive-700">{frag.author} · {frag.cite}</span>
+          <span className="rounded-full bg-olive-50 px-3 py-1 text-xs font-semibold text-olive-700">{frag.author} · {frag.cite}</span>
         </div>
 
         <div className="rounded-3xl bg-white p-5 shadow-card">
@@ -56,7 +56,7 @@ export default function FragmentBuilder({ chapterId, accentKey, onClose, onFinis
         </div>
 
         <p className="mt-5 mb-2 text-xs font-bold uppercase tracking-widest text-ink-faint">Deine Übersetzung</p>
-        <div className={`min-h-[88px] rounded-2xl border-2 border-dashed p-3 transition ${
+        <div className={`min-h-[88px] rounded-2xl border border-dashed p-3 transition ${
           state === 'correct' ? 'border-teal-300 bg-teal-50' : state === 'wrong' ? 'border-coral-300 bg-orange-50' : 'border-ink/15 bg-white/50'
         }`}>
           <div className="flex flex-wrap gap-2">
@@ -79,7 +79,7 @@ export default function FragmentBuilder({ chapterId, accentKey, onClose, onFinis
           {available.map((k) => (
             <motion.button
               key={k} layout whileTap={{ scale: 0.95 }} onClick={() => state === 'input' && setPicked((p) => [...p, k])}
-              className="rounded-xl border-2 border-ink/10 bg-white px-3 py-2 text-sm font-semibold text-ink tap"
+              className="rounded-xl border border-ink/15 bg-white px-3 py-2 text-sm font-semibold text-ink tap"
             >
               {frag.blocks[k]}
             </motion.button>
@@ -94,10 +94,10 @@ export default function FragmentBuilder({ chapterId, accentKey, onClose, onFinis
       </div>
 
       {state === 'input' ? (
-        <div className="safe-bottom fixed inset-x-0 bottom-0 z-20 px-4 pt-3">
+        <div className="safe-bottom fixed bottom-0 left-1/2 z-20 w-full max-w-[460px] -translate-x-1/2 border-t border-ink/10 bg-parchment px-4 pt-3">
           <div className="mx-auto flex max-w-[460px] gap-2">
-            <button onClick={() => setPicked([])} className="rounded-2xl border-2 border-ink/10 bg-white px-5 py-4 font-bold text-ink/50 tap">↺</button>
-            <button onClick={check} disabled={picked.length !== frag.blocks.length} className="flex-1 rounded-2xl bg-ink py-4 font-bold text-white tap shadow-float disabled:opacity-30">Prüfen</button>
+            <button onClick={() => setPicked([])} aria-label="Übersetzung zurücksetzen" className="rounded-2xl border border-ink/15 bg-white px-5 py-4 font-semibold text-ink-soft tap">↺</button>
+            <button onClick={check} disabled={picked.length !== frag.blocks.length} className="flex-1 rounded-2xl bg-ink py-4 font-semibold text-white tap disabled:opacity-30">Prüfen</button>
           </div>
         </div>
       ) : (

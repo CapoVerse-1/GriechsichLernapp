@@ -104,7 +104,7 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
     <ModeShell step={i} total={items.length} accentKey={accentKey} onClose={onClose}>
       <div className="flex flex-1 flex-col pb-40">
         <div className="py-3">
-          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-sun-600">{SYS_LABEL[item.system]}</span>
+          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-sun-600">{SYS_LABEL[item.system]}</span>
         </div>
         <p className="mb-1 text-sm text-ink-faint">Tippe einen Bestandteil an, dann seine Bedeutung:</p>
 
@@ -116,14 +116,14 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
             return (
               <button
                 key={k} onClick={() => state === 'input' && setSelTok(sel ? null : k)}
-                className={`flex flex-col items-center gap-1 rounded-2xl border-2 px-3 py-2 transition ${
+                className={`flex flex-col items-center gap-1 rounded-2xl border px-3 py-2 transition ${
                   sel ? 'border-teal-500 bg-teal-50 ring-2 ring-teal-200'
                   : state === 'correct' ? 'border-teal-300 bg-teal-50'
                   : state === 'wrong' && labelIdx !== k ? 'border-coral-300 bg-orange-50'
                   : labelIdx !== null ? 'border-olive-300 bg-olive-50' : 'border-ink/15 bg-white'
                 }`}
               >
-                <span className="text-xl font-extrabold text-ink">{p.token}</span>
+                <span className="text-xl font-semibold text-ink">{p.token}</span>
                 <span className={`text-[11px] font-semibold ${labelIdx !== null ? 'text-ink-soft' : 'text-ink-faint/50'}`}>
                   {labelIdx !== null ? item.parts[labelIdx].label : '?'}
                 </span>
@@ -140,7 +140,7 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
             return (
               <motion.button
                 key={k} whileTap={{ scale: 0.96 }} disabled={state !== 'input'} onClick={() => assignLabel(k)}
-                className={`rounded-xl border-2 px-3 py-2 text-sm font-semibold tap ${used ? 'border-ink/5 bg-ink/5 text-ink-faint/40' : 'border-ink/10 bg-white text-ink'}`}
+                className={`rounded-xl border px-3 py-2 text-sm font-semibold tap ${used ? 'border-ink/5 bg-ink/5 text-ink-faint/40' : 'border-ink/10 bg-white text-ink'}`}
               >
                 <span className="text-[10px] uppercase tracking-wide text-ink-faint">{item.parts[k].role}</span>
                 <br />{item.parts[k].label}
@@ -157,9 +157,9 @@ export default function CitationAnalyzer({ chapterId, accentKey, onClose, onFini
       </div>
 
       {state === 'input' ? (
-        <div className="safe-bottom fixed inset-x-0 bottom-0 z-20 px-4 pt-3">
+        <div className="safe-bottom fixed bottom-0 left-1/2 z-20 w-full max-w-[460px] -translate-x-1/2 border-t border-ink/10 bg-parchment px-4 pt-3">
           <div className="mx-auto max-w-[460px]">
-            <button onClick={check} disabled={!allAssigned} className="w-full rounded-2xl bg-ink py-4 font-bold text-white tap shadow-float disabled:opacity-30">Prüfen</button>
+            <button onClick={check} disabled={!allAssigned} className="w-full rounded-2xl bg-ink py-4 font-semibold text-white tap disabled:opacity-30">Prüfen</button>
           </div>
         </div>
       ) : (

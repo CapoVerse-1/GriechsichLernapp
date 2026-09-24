@@ -48,49 +48,50 @@ export default function TranscriptionType({ chapterId, accentKey, onClose, onFin
   return (
     <ModeShell step={i} total={items.length} accentKey={accentKey} onClose={onClose}>
       <div className="flex flex-1 flex-col pb-44">
-        <div className="py-3">
-          <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-bold text-teal-700">
+        <div className="py-2 min-[360px]:py-3">
+          <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700">
             {toGreek ? 'Schreibe in griechischen Buchstaben' : 'Transkribiere ins Lateinische'}
           </span>
         </div>
 
-        <div className="flex flex-1 flex-col items-center justify-center gap-6">
+        <div className="flex flex-1 flex-col items-center justify-center gap-3 min-[360px]:gap-6">
           <motion.div key={item.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
             <p className="text-xs font-bold uppercase tracking-widest text-ink-faint">{toGreek ? 'Transkription' : 'Griechisch'}</p>
-            <p className={`mt-2 font-bold leading-tight ${toGreek ? 'text-4xl' : 'greek text-6xl'}`}>{item.prompt}</p>
+            <p className={`mt-2 max-w-full font-bold leading-tight [overflow-wrap:anywhere] ${toGreek ? 'text-4xl' : 'greek text-[clamp(2.75rem,13vw,3.75rem)]'}`}>{item.prompt}</p>
             {item.hint && <p className="mt-3 text-sm text-ink-faint">≈ {item.hint}</p>}
           </motion.div>
 
           <input
             ref={inputRef} value={val} autoFocus autoCapitalize="none" autoCorrect="off" spellCheck={false}
+            aria-label={toGreek ? 'Griechische Schreibweise' : 'Lateinische Transkription'}
             onChange={(e) => setVal(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter' && state === 'input' && val.trim()) check() }}
             disabled={state !== 'input'}
             placeholder={toGreek ? 'griechisch tippen…' : 'z.B. logos'}
-            className={`w-full rounded-2xl border-2 bg-white px-5 py-4 text-center text-2xl font-semibold outline-none transition ${toGreek ? 'greek' : ''} ${
+            className={`w-full rounded-2xl border bg-white px-5 py-3 text-center text-2xl font-semibold outline-none transition min-[360px]:py-4 ${toGreek ? 'greek' : ''} ${
               state === 'correct' ? 'border-teal-400 text-teal-700' : state === 'wrong' ? 'border-coral-400 text-coral-600' : 'border-ink/15 focus:border-teal-400'
             }`}
           />
 
           {toGreek && (
             <div className="w-full">
-              <div className="mb-2 flex flex-wrap justify-center gap-1.5">
+              <div className="mb-2 flex flex-wrap justify-center gap-1 min-[360px]:gap-1.5">
                 {SPECIAL.map((k) => (
-                  <button key={k} onClick={() => insert(k)} className="greek h-9 min-w-9 rounded-lg bg-amber-100 px-2 text-lg font-semibold text-sun-600 tap">{k}</button>
+                  <button key={k} onClick={() => insert(k)} className="greek h-9 min-w-9 rounded-lg border border-amber-200 bg-amber-50 px-2 text-lg font-semibold text-sun-600 tap min-[360px]:h-10 min-[360px]:min-w-10">{k}</button>
                 ))}
               </div>
-              <div className="flex flex-wrap justify-center gap-1.5">
+              <div className="flex flex-wrap justify-center gap-1 min-[360px]:gap-1.5">
                 {GREEK_KEYS.map((k) => (
-                  <button key={k} onClick={() => insert(k)} className="greek h-9 w-9 rounded-lg bg-white text-lg shadow-sm tap">{k}</button>
+                  <button key={k} onClick={() => insert(k)} className="greek h-9 w-9 rounded-lg border border-ink/10 bg-white text-lg tap min-[360px]:h-10 min-[360px]:w-10">{k}</button>
                 ))}
-                <button onClick={() => setVal((v) => v.slice(0, -1))} className="h-9 rounded-lg bg-ink/10 px-3 tap">⌫</button>
+                <button onClick={() => setVal((v) => v.slice(0, -1))} aria-label="Letztes Zeichen löschen" className="h-9 rounded-lg bg-ink/10 px-3 tap min-[360px]:h-10">⌫</button>
               </div>
             </div>
           )}
           {!toGreek && (
-            <div className="flex flex-wrap justify-center gap-1.5">
+            <div className="flex flex-wrap justify-center gap-1 min-[360px]:gap-1.5">
               {['ē', 'ō', 'á', 'í', 'ý', 'ô', 'â'].map((k) => (
-                <button key={k} onClick={() => insert(k)} className="h-9 min-w-9 rounded-lg bg-amber-100 px-2 text-lg font-semibold text-sun-600 tap">{k}</button>
+                <button key={k} onClick={() => insert(k)} className="h-9 min-w-9 rounded-lg border border-amber-200 bg-amber-50 px-2 text-lg font-semibold text-sun-600 tap min-[360px]:h-10 min-[360px]:min-w-10">{k}</button>
               ))}
             </div>
           )}
@@ -98,9 +99,9 @@ export default function TranscriptionType({ chapterId, accentKey, onClose, onFin
       </div>
 
       {state === 'input' ? (
-        <div className="safe-bottom fixed inset-x-0 bottom-0 z-20 px-4 pt-3">
+        <div className="safe-bottom fixed bottom-0 left-1/2 z-20 w-full max-w-[460px] -translate-x-1/2 border-t border-ink/10 bg-parchment px-4 pt-3">
           <div className="mx-auto max-w-[460px]">
-            <button onClick={check} disabled={!val.trim()} className="w-full rounded-2xl bg-ink py-4 font-bold text-white tap shadow-float disabled:opacity-30">Prüfen</button>
+            <button onClick={check} disabled={!val.trim()} className="w-full rounded-2xl bg-ink py-4 font-semibold text-white tap disabled:opacity-30">Prüfen</button>
           </div>
         </div>
       ) : (

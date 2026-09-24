@@ -51,12 +51,12 @@ export default function BlitzRound({ chapterId, accentKey, onClose, onFinish }: 
   if (phase === 'ready') {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-8 text-center">
-        <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 1.6 }} className="text-7xl">⚡</motion.div>
+        <div className="grid h-20 w-20 place-items-center rounded-3xl bg-coral-500 font-serif text-5xl text-white">60</div>
         <div>
-          <h2 className="text-2xl font-black">Blitz-Runde</h2>
-          <p className="mt-2 text-ink-faint">60 Sekunden. So viele richtige Antworten wie möglich. Combos geben Extra-Punkte!</p>
+          <h2 className="font-serif text-2xl font-bold">Blitz-Runde</h2>
+          <p className="mt-2 text-ink-faint">60 Sekunden. Beantworte so viele Fragen wie möglich. Für Serien gibt es Extra-Punkte.</p>
         </div>
-        <button onClick={() => setPhase('play')} className="w-full max-w-xs rounded-2xl bg-coral-500 py-4 font-black text-white tap shadow-float">Los geht's!</button>
+        <button onClick={() => setPhase('play')} className="w-full max-w-xs rounded-2xl bg-coral-500 py-4 font-semibold text-white tap">Runde starten</button>
         <button onClick={onClose} className="text-sm font-semibold text-ink-faint tap">Abbrechen</button>
       </div>
     )
@@ -68,7 +68,7 @@ export default function BlitzRound({ chapterId, accentKey, onClose, onFinish }: 
         scorePct={answered ? correctTotal / answered : 0} correct={correctTotal} total={answered} xp={score} accentKey="coral"
         onRetry={() => { setQi(0); setScore(0); setCombo(0); setAnswered(0); setCorrectTotal(0); setTime(DURATION); setPhase('play') }}
         onDone={() => onFinish(answered ? correctTotal / answered : 0)}
-        extra={<div className="rounded-2xl bg-coral-50 px-6 py-3 font-bold text-coral-600">Blitz-Score: {score} ⚡</div>}
+        extra={<div className="rounded-2xl bg-coral-50 px-6 py-3 font-semibold text-coral-600">Blitz-Score: {score}</div>}
       />
     )
   }
@@ -94,19 +94,19 @@ export default function BlitzRound({ chapterId, accentKey, onClose, onFinish }: 
   return (
     <div className="flex min-h-screen flex-col px-4">
       <div className="safe-top flex items-center gap-3 pb-2 pt-2">
-        <button onClick={() => setPhase('done')} aria-label="Stop" className="grid h-9 w-9 place-items-center rounded-full text-ink/50 tap text-xl">✕</button>
+        <button onClick={() => setPhase('done')} aria-label="Stop" className="grid h-10 w-10 place-items-center rounded-xl bg-white text-ink-soft shadow-card tap text-xl">✕</button>
         <div className="h-3 flex-1 overflow-hidden rounded-full bg-ink/10">
-          <motion.div className="h-full rounded-full bg-gradient-to-r from-coral-400 to-coral-600" animate={{ width: `${(time / DURATION) * 100}%` }} transition={{ ease: 'linear', duration: 1 }} />
+          <motion.div className="h-full rounded-full bg-coral-500" animate={{ width: `${(time / DURATION) * 100}%` }} transition={{ ease: 'linear', duration: 1 }} />
         </div>
-        <span className={`w-10 text-right font-black tabular-nums ${time <= 10 ? 'text-coral-500' : 'text-ink'}`}>{time}</span>
+        <span className={`w-10 text-right font-semibold tabular-nums ${time <= 10 ? 'text-coral-500' : 'text-ink'}`}>{time}</span>
       </div>
 
       <div className="flex items-center justify-between py-1">
-        <span className="text-sm font-bold text-coral-500">⚡ {score}</span>
+        <span className="text-sm font-semibold tabular-nums text-coral-600">Score {score}</span>
         <AnimatePresence>
           {combo >= 2 && (
-            <motion.span key={combo} initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ opacity: 0 }} className="rounded-full bg-sun-500 px-3 py-0.5 text-xs font-black text-white">
-              {combo}× COMBO 🔥
+            <motion.span key={combo} initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ opacity: 0 }} className="rounded-full bg-sun-500 px-3 py-0.5 text-xs font-semibold text-white">
+              {combo}× Serie
             </motion.span>
           )}
         </AnimatePresence>
@@ -129,7 +129,7 @@ export default function BlitzRound({ chapterId, accentKey, onClose, onFinish }: 
               else cls = 'opacity-50 border-ink/10 bg-white'
             }
             return (
-              <motion.button key={idx} whileTap={{ scale: 0.97 }} onClick={() => pick(idx)} className={`rounded-2xl border-2 p-4 text-left font-semibold transition ${cls}`}>
+              <motion.button key={idx} whileTap={{ scale: 0.97 }} onClick={() => pick(idx)} className={`min-h-14 rounded-2xl border p-4 text-left font-semibold transition ${cls}`}>
                 {opt}
               </motion.button>
             )

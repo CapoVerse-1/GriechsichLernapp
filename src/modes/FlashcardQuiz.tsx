@@ -53,7 +53,7 @@ export default function FlashcardQuiz({ chapterId, accentKey, onClose, onFinish 
             {revealed && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
-                className="w-full overflow-hidden rounded-3xl bg-teal-50 p-6 text-center"
+                className="w-full overflow-hidden rounded-3xl border border-teal-200 bg-teal-50 p-6 text-center"
               >
                 <span className="text-xs font-bold uppercase tracking-widest text-teal-700/60">Antwort</span>
                 <p className={`mt-1 whitespace-pre-line font-semibold text-teal-800 ${card.backLang === 'gr' ? 'greek text-3xl' : 'text-xl'}`}>{card.back}</p>
@@ -64,13 +64,13 @@ export default function FlashcardQuiz({ chapterId, accentKey, onClose, onFinish 
 
         <div className="pb-4 pt-3">
           {!revealed ? (
-            <button onClick={() => setRevealed(true)} className="w-full rounded-2xl bg-ink py-4 font-bold text-white tap shadow-float">
+            <button onClick={() => setRevealed(true)} className="w-full rounded-2xl bg-ink py-4 font-semibold text-white tap">
               Antwort zeigen
             </button>
           ) : (
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => grade(false)} className="rounded-2xl bg-orange-50 py-4 font-bold text-coral-600 tap border-2 border-orange-200">✕ Falsch</button>
-              <button onClick={() => grade(true)} className="rounded-2xl bg-teal-600 py-4 font-bold text-white tap shadow-float">✓ Gewusst</button>
+              <button onClick={() => grade(false)} className="rounded-2xl border border-orange-200 bg-orange-50 py-4 font-semibold text-coral-600 tap">✕ Falsch</button>
+              <button onClick={() => grade(true)} className="rounded-2xl bg-teal-700 py-4 font-semibold text-white tap">✓ Gewusst</button>
             </div>
           )}
         </div>

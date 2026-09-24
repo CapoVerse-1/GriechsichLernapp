@@ -58,11 +58,11 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-5 px-6 text-center">
         <Celebrate show={total >= 61} />
-        <motion.div initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 180, damping: 14 }} className="text-7xl">{band.emoji}</motion.div>
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 180, damping: 14 }} className="grid h-20 w-20 place-items-center rounded-3xl bg-teal-800 font-serif text-4xl text-white">Σ</motion.div>
         <div>
           <p className="text-sm font-bold uppercase tracking-widest text-ink-faint">Klausur-Ergebnis</p>
-          <h2 className="text-5xl font-black tabular-nums">{total}<span className="text-2xl text-ink-faint">/{TOTAL_POINTS}</span></h2>
-          <p className={`mt-1 text-xl font-extrabold ${passed ? 'text-teal-700' : 'text-coral-600'}`}>{band.grade}</p>
+          <h2 className="mt-2 text-5xl font-semibold tabular-nums">{total}<span className="text-2xl text-ink-faint">/{TOTAL_POINTS}</span></h2>
+          <p className={`mt-1 font-serif text-xl font-bold ${passed ? 'text-teal-700' : 'text-coral-600'}`}>{band.grade}</p>
         </div>
         <div className="w-full max-w-xs space-y-1.5 rounded-2xl bg-white p-4 text-left text-sm shadow-card">
           {GRADE_SCALE.map((b) => (
@@ -72,8 +72,8 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
           ))}
         </div>
         <div className="flex w-full max-w-xs flex-col gap-2">
-          <button onClick={() => { setI(0); setEarned(0); setVal(''); setPicked(new Set()); setPhase('answer'); setDone(false) }} className="w-full rounded-2xl bg-teal-600 py-4 font-bold text-white tap shadow-float">Neue Klausur</button>
-          <button onClick={onFinish} className="w-full rounded-2xl border-2 border-ink/10 bg-white py-4 font-bold text-ink/70 tap">Fertig</button>
+          <button onClick={() => { setI(0); setEarned(0); setVal(''); setPicked(new Set()); setPhase('answer'); setDone(false) }} className="w-full rounded-2xl bg-teal-700 py-4 font-semibold text-white tap">Neue Klausur</button>
+          <button onClick={onFinish} className="w-full rounded-2xl border border-ink/15 bg-white py-4 font-semibold text-ink-soft tap">Fertig</button>
         </div>
       </div>
     )
@@ -116,16 +116,16 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
   return (
     <div className="flex min-h-screen flex-col">
       {/* header */}
-      <div className="safe-top sticky top-0 z-10 glass px-4 pb-2 pt-2 shadow-sm">
+      <div className="safe-top sticky top-0 z-10 border-b border-ink/10 glass px-4 pb-3 pt-3">
         <div className="flex items-center gap-3">
-          <button onClick={onClose} aria-label="Abbrechen" className="grid h-9 w-9 place-items-center rounded-full text-ink/50 tap text-xl">✕</button>
+          <button onClick={onClose} aria-label="Abbrechen" className="grid h-10 w-10 place-items-center rounded-xl bg-white text-ink-soft shadow-card tap text-xl">✕</button>
           <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-ink/10">
-            <motion.div className="h-full rounded-full bg-gradient-to-r from-teal-500 to-teal-700" animate={{ width: `${(i / steps.length) * 100}%` }} />
+            <motion.div className="h-full rounded-full bg-teal-700" animate={{ width: `${(i / steps.length) * 100}%` }} />
           </div>
-          <span className="text-sm font-black tabular-nums text-teal-700">{Math.round(earned)} P</span>
+          <span className="text-sm font-semibold tabular-nums text-teal-700">{Math.round(earned)} P</span>
         </div>
         <div className="mt-2 flex items-center gap-2">
-          <span className="rounded-full bg-teal-600 px-2.5 py-0.5 text-xs font-black text-white">Aufgabe {sec.no}</span>
+          <span className="shrink-0 whitespace-nowrap rounded-full bg-teal-700 px-2.5 py-0.5 text-xs font-semibold text-white">Aufgabe {sec.no}</span>
           <span className="truncate text-xs font-semibold text-ink-soft">{sec.title}</span>
           <span className="ml-auto shrink-0 text-xs font-bold text-ink-faint">{sec.points} P</span>
         </div>
@@ -134,22 +134,22 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
       <div className="flex flex-1 flex-col px-4 pb-44 pt-4">
         {/* ---- TYPE ---- */}
         {step.kind === 'type' && (
-          <div className="flex flex-1 flex-col items-center justify-center gap-5">
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 min-[360px]:gap-5">
             <p className="text-xs font-bold uppercase tracking-widest text-ink-faint">{step.toGreek ? 'In griechische Buchstaben' : 'Ins Lateinische transkribieren'}</p>
-            <p className={`text-center font-bold ${step.toGreek ? 'text-4xl' : 'greek text-6xl'}`}>{step.prompt}</p>
-            <input value={val} autoFocus autoCapitalize="none" autoCorrect="off" spellCheck={false} disabled={phase === 'review'}
+            <p className={`max-w-full text-center font-bold [overflow-wrap:anywhere] ${step.toGreek ? 'text-4xl' : 'greek text-[clamp(2.75rem,13vw,3.75rem)]'}`}>{step.prompt}</p>
+            <input value={val} autoFocus autoCapitalize="none" autoCorrect="off" spellCheck={false} disabled={phase === 'review'} aria-label={step.toGreek ? 'Griechische Schreibweise' : 'Lateinische Transkription'}
               onChange={(e) => setVal(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && val.trim() && phase === 'answer') submitType() }}
-              className={`w-full rounded-2xl border-2 bg-white px-5 py-4 text-center text-2xl font-semibold outline-none ${step.toGreek ? 'greek' : ''} ${phase === 'review' ? (gotPts > 0 ? 'border-teal-400 text-teal-700' : 'border-coral-400 text-coral-600') : 'border-ink/15 focus:border-teal-400'}`} />
+              className={`w-full rounded-2xl border bg-white px-5 py-3 text-center text-2xl font-semibold outline-none min-[360px]:py-4 ${step.toGreek ? 'greek' : ''} ${phase === 'review' ? (gotPts > 0 ? 'border-teal-400 text-teal-700' : 'border-coral-400 text-coral-600') : 'border-ink/15 focus:border-teal-400'}`} />
             {step.toGreek && (
               <div className="w-full">
-                <div className="mb-1.5 flex flex-wrap justify-center gap-1.5">{SPECIAL.map((k) => <button key={k} onClick={() => insert(k)} className="greek h-9 min-w-9 rounded-lg bg-amber-100 px-2 text-lg tap">{k}</button>)}</div>
-                <div className="flex flex-wrap justify-center gap-1.5">
-                  {GREEK_KEYS.map((k) => <button key={k} onClick={() => insert(k)} className="greek h-9 w-9 rounded-lg bg-white text-lg shadow-sm tap">{k}</button>)}
-                  <button onClick={() => setVal((v) => v.slice(0, -1))} className="h-9 rounded-lg bg-ink/10 px-3 tap">⌫</button>
+                <div className="mb-1.5 flex flex-wrap justify-center gap-1 min-[360px]:gap-1.5">{SPECIAL.map((k) => <button key={k} onClick={() => insert(k)} className="greek h-9 min-w-9 rounded-lg border border-amber-200 bg-amber-50 px-2 text-lg tap min-[360px]:h-10 min-[360px]:min-w-10">{k}</button>)}</div>
+                <div className="flex flex-wrap justify-center gap-1 min-[360px]:gap-1.5">
+                  {GREEK_KEYS.map((k) => <button key={k} onClick={() => insert(k)} className="greek h-9 w-9 rounded-lg border border-ink/10 bg-white text-lg tap min-[360px]:h-10 min-[360px]:w-10">{k}</button>)}
+                  <button onClick={() => setVal((v) => v.slice(0, -1))} aria-label="Letztes Zeichen löschen" className="h-9 rounded-lg bg-ink/10 px-3 tap min-[360px]:h-10">⌫</button>
                 </div>
               </div>
             )}
-            {!step.toGreek && <div className="flex flex-wrap justify-center gap-1.5">{['ē', 'ō', 'á', 'í', 'ý', 'ô'].map((k) => <button key={k} onClick={() => insert(k)} className="h-9 min-w-9 rounded-lg bg-amber-100 px-2 text-lg tap">{k}</button>)}</div>}
+            {!step.toGreek && <div className="flex flex-wrap justify-center gap-1 min-[360px]:gap-1.5">{['ē', 'ō', 'á', 'í', 'ý', 'ô'].map((k) => <button key={k} onClick={() => insert(k)} className="h-9 min-w-9 rounded-lg border border-amber-200 bg-amber-50 px-2 text-lg tap min-[360px]:h-10 min-[360px]:min-w-10">{k}</button>)}</div>}
           </div>
         )}
 
@@ -157,17 +157,17 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
         {step.kind === 'vocab' && (
           <div className="flex flex-1 flex-col items-center justify-center gap-5">
             <p className="text-xs font-bold uppercase tracking-widest text-ink-faint">Ins Deutsche übersetzen</p>
-            <p className="greek text-center text-6xl font-bold">{step.gr}</p>
-            <input value={val} autoFocus disabled={phase === 'review'} onChange={(e) => setVal(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && val.trim() && phase === 'answer') submitVocab() }}
+            <p className="greek max-w-full text-center text-[clamp(2.75rem,13vw,3.75rem)] font-bold [overflow-wrap:anywhere]">{step.gr}</p>
+            <input value={val} autoFocus disabled={phase === 'review'} aria-label="Deutsche Bedeutung" onChange={(e) => setVal(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && val.trim() && phase === 'answer') submitVocab() }}
               placeholder="deutsche Bedeutung…"
-              className={`w-full rounded-2xl border-2 bg-white px-5 py-4 text-center text-2xl font-semibold outline-none ${phase === 'review' ? (gotPts > 0 ? 'border-teal-400 text-teal-700' : 'border-coral-400 text-coral-600') : 'border-ink/15 focus:border-teal-400'}`} />
+              className={`w-full rounded-2xl border bg-white px-5 py-4 text-center text-2xl font-semibold outline-none ${phase === 'review' ? (gotPts > 0 ? 'border-teal-400 text-teal-700' : 'border-coral-400 text-coral-600') : 'border-ink/15 focus:border-teal-400'}`} />
           </div>
         )}
 
         {/* ---- MC ---- */}
         {step.kind === 'mc' && (
           <div className="flex flex-1 flex-col">
-            <h3 className="mb-4 text-lg font-extrabold leading-snug">{step.q.q}</h3>
+            <h3 className="mb-4 font-serif text-xl font-bold leading-snug">{step.q.q}</h3>
             <div className="flex flex-col gap-3">
               {step.order.map((idx) => {
                 const opt = step.q.options[idx]; const sel = picked.has(idx); const isAns = step.q.correct.includes(idx)
@@ -176,8 +176,8 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
                 else if (sel) cls = 'border-teal-500 bg-teal-50 ring-2 ring-teal-200'
                 return (
                   <button key={idx} onClick={() => phase === 'answer' && setPicked((p) => { const n = new Set(p); n.has(idx) ? n.delete(idx) : n.add(idx); return n })}
-                    className={`flex items-center gap-3 rounded-2xl border-2 p-4 text-left font-medium ${cls}`}>
-                    <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-md border-2 text-xs font-bold ${sel ? 'border-teal-500 bg-teal-500 text-white' : 'border-ink/20'}`}>{phase === 'review' ? (isAns ? '✓' : sel ? '✕' : '') : sel ? '✓' : ''}</span>
+                    className={`flex min-h-14 items-center gap-3 rounded-2xl border p-4 text-left font-medium ${cls}`}>
+                    <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-md border text-xs font-bold ${sel ? 'border-teal-500 bg-teal-500 text-white' : 'border-ink/20'}`}>{phase === 'review' ? (isAns ? '✓' : sel ? '✕' : '') : sel ? '✓' : ''}</span>
                     {opt}
                   </button>
                 )
@@ -207,22 +207,22 @@ export default function MockExam({ onClose, onFinish }: { onClose: () => void; o
       </div>
 
       {/* footer actions */}
-      <div className="safe-bottom fixed inset-x-0 bottom-0 z-20 px-4 pt-3">
+      <div className="safe-bottom fixed bottom-0 left-1/2 z-20 w-full max-w-[460px] -translate-x-1/2 border-t border-ink/10 bg-parchment px-4 pt-3">
         <div className="mx-auto max-w-[460px]">
-          {phase === 'answer' && step.kind === 'type' && <button onClick={submitType} disabled={!val.trim()} className="w-full rounded-2xl bg-ink py-4 font-bold text-white tap shadow-float disabled:opacity-30">Abgeben</button>}
-          {phase === 'answer' && step.kind === 'vocab' && <button onClick={submitVocab} disabled={!val.trim()} className="w-full rounded-2xl bg-ink py-4 font-bold text-white tap shadow-float disabled:opacity-30">Abgeben</button>}
-          {phase === 'answer' && step.kind === 'mc' && <button onClick={submitMc} disabled={picked.size === 0} className="w-full rounded-2xl bg-ink py-4 font-bold text-white tap shadow-float disabled:opacity-30">Abgeben</button>}
-          {phase === 'answer' && step.kind === 'self' && <button onClick={() => setPhase('review')} className="w-full rounded-2xl bg-ink py-4 font-bold text-white tap shadow-float">Lösung zeigen</button>}
+          {phase === 'answer' && step.kind === 'type' && <button onClick={submitType} disabled={!val.trim()} className="w-full rounded-2xl bg-ink py-4 font-semibold text-white tap disabled:opacity-30">Abgeben</button>}
+          {phase === 'answer' && step.kind === 'vocab' && <button onClick={submitVocab} disabled={!val.trim()} className="w-full rounded-2xl bg-ink py-4 font-semibold text-white tap disabled:opacity-30">Abgeben</button>}
+          {phase === 'answer' && step.kind === 'mc' && <button onClick={submitMc} disabled={picked.size === 0} className="w-full rounded-2xl bg-ink py-4 font-semibold text-white tap disabled:opacity-30">Abgeben</button>}
+          {phase === 'answer' && step.kind === 'self' && <button onClick={() => setPhase('review')} className="w-full rounded-2xl bg-ink py-4 font-semibold text-white tap">Lösung zeigen</button>}
 
           {phase === 'review' && step.kind === 'self' && (
             <div className="grid grid-cols-3 gap-2">
-              <button onClick={async () => { await app.award(false); await next(0) }} className="rounded-2xl bg-orange-50 py-3 text-sm font-bold text-coral-600 tap border-2 border-orange-200">Nicht<br />0 P</button>
-              <button onClick={async () => { await app.award(true, { xp: 4 }); await next(step.pts / 2) }} className="rounded-2xl bg-amber-50 py-3 text-sm font-bold text-sun-600 tap border-2 border-amber-200">Teilweise<br />{Math.round(step.pts / 2)} P</button>
-              <button onClick={async () => { await app.award(true, { xp: 8 }); await next(step.pts) }} className="rounded-2xl bg-teal-600 py-3 text-sm font-bold text-white tap shadow-float">Voll<br />{step.pts} P</button>
+              <button onClick={async () => { await app.award(false); await next(0) }} className="rounded-2xl border border-orange-200 bg-orange-50 py-3 text-sm font-semibold text-coral-600 tap">Nicht<br />0 P</button>
+              <button onClick={async () => { await app.award(true, { xp: 4 }); await next(step.pts / 2) }} className="rounded-2xl border border-amber-200 bg-amber-50 py-3 text-sm font-semibold text-sun-600 tap">Teilweise<br />{Math.round(step.pts / 2)} P</button>
+              <button onClick={async () => { await app.award(true, { xp: 8 }); await next(step.pts) }} className="rounded-2xl bg-teal-700 py-3 text-sm font-semibold text-white tap">Voll<br />{step.pts} P</button>
             </div>
           )}
           {phase === 'review' && step.kind !== 'self' && (
-            <button onClick={() => { void next(gotPts) }} className={`flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-bold text-white tap shadow-float ${gotPts > 0 ? 'bg-teal-600' : 'bg-coral-500'}`}>
+            <button onClick={() => { void next(gotPts) }} className={`flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-semibold text-white tap ${gotPts > 0 ? 'bg-teal-700' : 'bg-coral-500'}`}>
               {gotPts > 0 ? `✓ +${gotPts % 1 === 0 ? gotPts : gotPts.toFixed(1)} Punkte` : '✕ 0 Punkte'} · {i + 1 >= steps.length ? 'Auswerten' : 'Weiter'}
             </button>
           )}
